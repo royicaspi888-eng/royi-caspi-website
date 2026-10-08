@@ -15,34 +15,33 @@
 <style>
 :root {
   --paper: #f2ebdd;
-  --black: #171717;
+  --ink: #171717;
   --red: #ad3038;
   --wine: #641d29;
 }
 
 * { box-sizing: border-box; }
-
 html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
   background: var(--paper);
-  color: var(--black);
+  color: var(--ink);
   font-family: 'IM Fell English', Georgia, serif;
 }
 
+body.modal-open { overflow: hidden; }
 a { color: inherit; }
+button { font: inherit; cursor: pointer; }
 
 header {
-  position: relative;
-  z-index: 5;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
   padding: 18px 6%;
   background: var(--paper);
-  border-bottom: 2px solid var(--black);
+  border-bottom: 2px solid var(--ink);
 }
 
 .brand {
@@ -73,7 +72,7 @@ nav a:hover { color: var(--red); }
   justify-content: center;
   padding: 100px 20px;
   overflow: hidden;
-  background: var(--black);
+  background: var(--ink);
   color: var(--paper);
   text-align: center;
 }
@@ -81,9 +80,7 @@ nav a:hover { color: var(--red); }
 .hero-photo {
   position: absolute;
   inset: 0;
-  background-image: url('IMG_1319.jpeg');
-  background-size: cover;
-  background-position: center 56%;
+  background: url('IMG_1319.jpeg') center 56% / cover;
   filter: grayscale(100%);
   opacity: .65;
 }
@@ -141,7 +138,7 @@ h1 span { color: #e5b7b7; }
   color: white;
   font-size: 18px;
   text-decoration: none;
-  transition: .2s;
+  transition: transform .2s, background .2s;
 }
 
 .button:hover {
@@ -152,7 +149,7 @@ h1 span { color: #e5b7b7; }
 section.content {
   padding: 85px 7%;
   text-align: center;
-  border-bottom: 2px solid var(--black);
+  border-bottom: 2px solid var(--ink);
   scroll-margin-top: 20px;
 }
 
@@ -175,38 +172,211 @@ h2 {
   line-height: 1.5;
 }
 
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  max-width: 1100px;
-  margin: 40px auto 0;
-}
+/* PINTEREST GALLERY */
 
-.placeholder {
-  aspect-ratio: 3 / 4;
-  border: 2px solid var(--black);
-  background: #e5d9c7;
+.gallery-filters {
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  gap: 18px;
-  padding: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 30px 0;
 }
 
-.placeholder span {
-  font-size: 65px;
+.filter-btn {
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  padding: 10px 22px;
+  font-size: 17px;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+  background: var(--wine);
+  color: white;
+  border-color: var(--wine);
+}
+
+.masonry {
+  columns: 3 230px;
+  column-gap: 18px;
+  max-width: 1200px;
+  margin: 35px auto 0;
+  text-align: left;
+}
+
+.work-card {
+  display: block;
+  width: 100%;
+  margin: 0 0 18px;
+  padding: 0;
+  break-inside: avoid;
+  background: #e6dccd;
+  border: 1px solid rgba(23,23,23,.2);
+  color: var(--ink);
+  text-align: left;
+  overflow: hidden;
+  transition: transform .2s, box-shadow .2s;
+}
+
+.work-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 7px 9px 0 rgba(100,29,41,.25);
+}
+
+.work-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.work-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 15px;
+}
+
+.work-info strong {
+  font-size: 21px;
+  font-weight: normal;
+}
+
+.work-info small {
+  font-size: 14px;
   color: var(--wine);
 }
 
-.placeholder p {
-  font-size: 20px;
+.gallery-note {
+  margin-top: 30px;
+  font-size: 17px;
   font-style: italic;
+  opacity: .7;
 }
 
+/* LIGHTBOX */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(12,10,10,.94);
+  color: var(--paper);
+}
+
+.lightbox.open { display: flex; }
+
+.lightbox-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: min(100%, 1000px);
+  max-height: 100%;
+}
+
+.lightbox-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+}
+
+.lightbox-title {
+  margin: 0;
+  font-size: clamp(25px, 4vw, 42px);
+}
+
+.close-btn {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--paper);
+  background: transparent;
+  color: white;
+  font-size: 27px;
+}
+
+.lightbox-viewer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 0;
+  flex: 1;
+}
+
+.lightbox-image {
+  display: block;
+  max-width: calc(100% - 112px);
+  max-height: min(68vh, 850px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border: 2px solid rgba(242,235,221,.35);
+}
+
+.arrow {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 54px;
+  border: 1px solid var(--paper);
+  background: var(--wine);
+  color: white;
+  font-size: 30px;
+}
+
+.arrow:hover, .close-btn:hover {
+  background: var(--red);
+}
+
+.lightbox-counter {
+  font-size: 17px;
+  letter-spacing: 2px;
+}
+
+.thumbnails {
+  display: flex;
+  justify-content: center;
+  gap: 9px;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 4px;
+}
+
+.thumb {
+  width: 60px;
+  height: 70px;
+  padding: 2px;
+  background: transparent;
+  border: 2px solid transparent;
+}
+
+.thumb.active { border-color: #e5b7b7; }
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lightbox-caption {
+  font-size: 16px;
+  text-align: center;
+  opacity: .85;
+}
+
+/* OTHER SECTIONS */
+
 .flash {
-  background: var(--black);
+  background: var(--ink);
   color: var(--paper);
 }
 
@@ -226,7 +396,7 @@ h2 {
   display: block;
   width: 100%;
   height: auto;
-  border: 3px solid var(--black);
+  border: 3px solid var(--ink);
   filter: grayscale(100%);
 }
 
@@ -265,15 +435,17 @@ footer .copyright {
   }
 
   nav a { font-size: 15px; }
-
   .hero { min-height: 75vh; }
-
   h1 { font-size: clamp(70px, 18vw, 120px); }
 
-  .gallery {
-    grid-template-columns: 1fr;
-    max-width: 350px;
+  section.content { padding: 65px 6%; }
+
+  .masonry {
+    columns: 2 145px;
+    column-gap: 12px;
   }
+
+  .work-card { margin-bottom: 12px; }
 
   .about {
     grid-template-columns: 1fr;
@@ -282,12 +454,24 @@ footer .copyright {
 
   .about-copy { text-align: center; }
 
-  section.content { padding: 65px 6%; }
+  .lightbox { padding: 12px; }
+
+  .lightbox-image {
+    max-width: calc(100% - 80px);
+    max-height: 58vh;
+  }
+
+  .arrow {
+    flex-basis: 32px;
+    width: 32px;
+    height: 45px;
+    font-size: 22px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .button { transition: none; }
+  .work-card, .button { transition: none; }
 }
 </style>
 </head>
@@ -296,7 +480,6 @@ footer .copyright {
 
 <header>
   <a class="brand" href="#home">R.C. ✶</a>
-
   <nav aria-label="Main navigation">
     <a href="#home">Home</a>
     <a href="#portfolio">Portfolio</a>
@@ -310,16 +493,12 @@ footer .copyright {
 
 <section class="hero" id="home">
   <div class="hero-photo"></div>
-
   <div class="hero-content">
     <p class="small-heading">✶ Tattoos & Original Art ✶</p>
-
     <h1>ROYI<br><span>CASPI</span></h1>
-
     <p class="hero-subtitle">
       Traditional Roots. Wandering Soul.
     </p>
-
     <a class="button" href="#portfolio">
       Explore My Work ↗
     </a>
@@ -332,26 +511,26 @@ footer .copyright {
 
   <p class="description">
     Bold lines, timeless imagery and
-    original artwork inspired by
-    traditional tattooing.
+    original artwork inspired by traditional tattooing.
   </p>
 
-  <div class="gallery">
-    <div class="placeholder">
-      <span>✶</span>
-      <p>Coming Soon</p>
-    </div>
-
-    <div class="placeholder">
-      <span>⚓</span>
-      <p>Coming Soon</p>
-    </div>
-
-    <div class="placeholder">
-      <span>✦</span>
-      <p>Coming Soon</p>
-    </div>
+  <div class="gallery-filters" aria-label="Filter works">
+    <button class="filter-btn active" data-filter="all">
+      All Work
+    </button>
+    <button class="filter-btn" data-filter="tattoo">
+      Tattoos
+    </button>
+    <button class="filter-btn" data-filter="flash">
+      Flash & Art
+    </button>
   </div>
+
+  <div class="masonry" id="gallery"></div>
+
+  <p class="gallery-note">
+    More ink and artwork coming soon.
+  </p>
 </section>
 
 <section class="content flash" id="flash">
@@ -402,7 +581,6 @@ footer .copyright {
 <footer id="contact">
   <p>✶ ✶ ✶</p>
   <h2>Let's Make Something Permanent.</h2>
-
   <p>For tattoos, flash and collaborations.</p>
 
   <a class="button"
@@ -416,6 +594,259 @@ footer .copyright {
     © 2026 ROYI CASPI — TATTOOS & ART
   </p>
 </footer>
+
+<!-- FLOATING IMAGE VIEWER -->
+
+<div class="lightbox"
+     id="lightbox"
+     role="dialog"
+     aria-modal="true"
+     aria-label="Tattoo photo gallery"
+     aria-hidden="true">
+
+  <div class="lightbox-panel">
+    <div class="lightbox-top">
+      <h3 class="lightbox-title" id="lightboxTitle"></h3>
+      <button class="close-btn"
+              id="closeLightbox"
+              aria-label="Close gallery">×</button>
+    </div>
+
+    <div class="lightbox-viewer">
+      <button class="arrow"
+              id="prevPhoto"
+              aria-label="Previous photo">‹</button>
+
+      <img class="lightbox-image"
+           id="lightboxImage"
+           alt="Tattoo photograph">
+
+      <button class="arrow"
+              id="nextPhoto"
+              aria-label="Next photo">›</button>
+    </div>
+
+    <div class="lightbox-counter" id="photoCounter"></div>
+    <div class="thumbnails" id="thumbnails"></div>
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+</div>
+
+<script>
+/*
+  ADD NEW WORKS HERE LATER.
+  Each work has one gallery card
+  and as many photos as you want.
+*/
+
+const works = [
+  {
+    id: "heart-vines",
+    title: "Heart & Vines",
+    category: "tattoo",
+    description: "Anatomical heart, flowers & vines",
+    photos: [
+      "heart-1.jpg",
+      "heart-2.jpg",
+      "heart-3.jpg"
+    ]
+  }
+];
+
+const gallery = document.getElementById("gallery");
+const lightbox = document.getElementById("lightbox");
+const lightboxTitle = document.getElementById("lightboxTitle");
+const lightboxImage = document.getElementById("lightboxImage");
+const photoCounter = document.getElementById("photoCounter");
+const thumbnails = document.getElementById("thumbnails");
+const lightboxCaption = document.getElementById("lightboxCaption");
+
+let activeWork = null;
+let activePhoto = 0;
+let lastFocusedElement = null;
+
+function renderGallery(filter = "all") {
+  gallery.innerHTML = "";
+
+  const visibleWorks = works.filter(work =>
+    filter === "all" || work.category === filter
+  );
+
+  if (!visibleWorks.length) {
+    const message = document.createElement("p");
+    message.textContent = "New work coming soon.";
+    message.className = "description";
+    gallery.appendChild(message);
+    return;
+  }
+
+  visibleWorks.forEach(work => {
+    const card = document.createElement("button");
+    card.className = "work-card";
+    card.type = "button";
+    card.setAttribute("aria-label", "View " + work.title);
+
+    const img = document.createElement("img");
+    img.src = work.photos[0];
+    img.alt = work.description;
+    img.loading = "lazy";
+
+    const info = document.createElement("div");
+    info.className = "work-info";
+
+    const title = document.createElement("strong");
+    title.textContent = work.title;
+
+    const count = document.createElement("small");
+    count.textContent = work.photos.length + " photos ↗";
+
+    info.append(title, count);
+    card.append(img, info);
+
+    card.addEventListener("click", () => openWork(work));
+
+    gallery.appendChild(card);
+  });
+}
+
+function openWork(work) {
+  lastFocusedElement = document.activeElement;
+  activeWork = work;
+  activePhoto = 0;
+
+  lightbox.classList.add("open");
+  lightbox.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+
+  showPhoto();
+  document.getElementById("closeLightbox").focus();
+}
+
+function showPhoto() {
+  if (!activeWork) return;
+
+  lightboxTitle.textContent = activeWork.title;
+  lightboxImage.src = activeWork.photos[activePhoto];
+  lightboxImage.alt =
+    activeWork.title + " — photo " + (activePhoto + 1);
+
+  photoCounter.textContent =
+    (activePhoto + 1) + " / " + activeWork.photos.length;
+
+  lightboxCaption.textContent = activeWork.description;
+
+  thumbnails.innerHTML = "";
+
+  activeWork.photos.forEach((photo, index) => {
+    const button = document.createElement("button");
+    button.className =
+      "thumb" + (index === activePhoto ? " active" : "");
+
+    button.setAttribute(
+      "aria-label", "Show photo " + (index + 1)
+    );
+
+    const img = document.createElement("img");
+    img.src = photo;
+    img.alt = "";
+
+    button.appendChild(img);
+    button.addEventListener("click", () => {
+      activePhoto = index;
+      showPhoto();
+    });
+
+    thumbnails.appendChild(button);
+  });
+}
+
+function changePhoto(direction) {
+  if (!activeWork) return;
+
+  const count = activeWork.photos.length;
+  activePhoto = (activePhoto + direction + count) % count;
+  showPhoto();
+}
+
+function closeLightbox() {
+  lightbox.classList.remove("open");
+  lightbox.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+  activeWork = null;
+
+  if (lastFocusedElement) {
+    lastFocusedElement.focus();
+  }
+}
+
+document.getElementById("closeLightbox")
+  .addEventListener("click", closeLightbox);
+
+document.getElementById("prevPhoto")
+  .addEventListener("click", () => changePhoto(-1));
+
+document.getElementById("nextPhoto")
+  .addEventListener("click", () => changePhoto(1));
+
+lightbox.addEventListener("click", event => {
+  if (event.target === lightbox) closeLightbox();
+});
+
+document.addEventListener("keydown", event => {
+  if (!activeWork) return;
+
+  if (event.key === "Escape") closeLightbox();
+  if (event.key === "ArrowRight") changePhoto(1);
+  if (event.key === "ArrowLeft") changePhoto(-1);
+
+  if (event.key === "Tab") {
+    const controls = [...lightbox.querySelectorAll("button")];
+    const first = controls[0];
+    const last = controls[controls.length - 1];
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey &&
+               document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+});
+
+/* Swipe between photos on touch screens */
+
+let touchStartX = 0;
+
+lightboxImage.addEventListener("touchstart", event => {
+  touchStartX = event.changedTouches[0].screenX;
+}, { passive: true });
+
+lightboxImage.addEventListener("touchend", event => {
+  const distance =
+    event.changedTouches[0].screenX - touchStartX;
+
+  if (Math.abs(distance) > 50) {
+    changePhoto(distance < 0 ? 1 : -1);
+  }
+}, { passive: true });
+
+/* Gallery category filters */
+
+document.querySelectorAll(".filter-btn").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+    renderGallery(button.dataset.filter);
+  });
+});
+
+renderGallery();
+</script>
 
 </body>
 </html>
