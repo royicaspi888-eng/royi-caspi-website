@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f2ebdd">
+  <meta name="description" content="Royi Caspi — traditional tattoos, flash designs and original artwork.">
+  <title>Royi Caspi — Tattoos & Art</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Pirata+One&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --paper: #f2ebdd;
+      --ink: #171717;
+      --red: #ad3038;
+      --wine: #641d29;
+      --line: #b9a99a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'IM Fell English', Georgia, serif;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    header {
+      padding: 20px 6%;
+      border-bottom: 2px solid var(--ink);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .brand {
+      font-family: 'Pirata One', Georgia, serif;
+      font-size: 30px;
+      text-decoration: none;
+      color: var(--wine);
+    }
+
+    nav {
+      display: flex;
+      gap: 25px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    nav a {
+      font-size: 17px;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      color: var(--red);
+    }
+
+    .hero {
+      min-height: 78vh;
+      padding: 75px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .ornament {
+      color: var(--red);
+      font-size: 30px;
+      letter-spacing: 8px;
+    }
+
+    .eyebrow {
+      font-size: 17px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Pirata One', Georgia, serif;
+      font-weight: 400;
+    }
+
+    h1 {
+      font-size: clamp(75px, 15vw, 190px);
+      line-height: 0.82;
+      margin: 35px 0;
+      letter-spacing: 2px;
+    }
+
+    h1 span {
+      color: var(--wine);
+    }
+
+    .subtitle {
+      font-size: clamp(20px, 3vw, 28px);
+      font-style: italic;
+      margin: 15px 0 30px;
+    }
+
+    .button {
+      display: inline-block;
+      background: var(--red);
+      border: 2px solid var(--ink);
+      padding: 15px 35px;
+      color: var(--paper);
+      text-decoration: none;
+      font-size: 19px;
+      transition: transform .2s, background .2s;
+    }
+
+    .button:hover {
+      background: var(--wine);
+      transform: translateY(-3px);
+    }
+
+    .section {
+      padding: 80px 7%;
+      text-align: center;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .section-label {
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 15px;
+    }
+
+    h2 {
+      font-size: clamp(45px, 7vw, 75px);
+      margin: 15px 0 30px;
+    }
+
+    .intro {
+      max-width: 650px;
+      margin: 0 auto 40px;
+      font-size: 21px;
+      line-height: 1.6;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1100px;
+      margin: 45px auto 0;
+    }
+
+    .art {
+      aspect-ratio: 3 / 4;
+      border: 2px solid var(--ink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: #e9dfcf;
+    }
+
+    .art .symbol {
+      font-size: 65px;
+      color: var(--wine);
+    }
+
+    .art p {
+      font-style: italic;
+      font-size: 20px;
+    }
+
+    .flash-section {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .flash-section .section-label {
+      color: #d98990;
+    }
+
+    .flash-section .button {
+      border-color: var(--paper);
+    }
+
+    .about-text {
+      max-width: 650px;
+      margin: auto;
+      font-size: 21px;
+      line-height: 1.7;
+    }
+
+    footer {
+      padding: 55px 20px;
+      text-align: center;
+      background: var(--wine);
+      color: var(--paper);
+    }
+
+    footer h2 {
+      margin: 0 0 20px;
+    }
+
+    footer a {
+      color: var(--paper);
+    }
+
+    .copyright {
+      margin-top: 45px;
+      font-size: 14px;
+      opacity: .8;
+    }
+
+    @media (max-width: 700px) {
+      header {
+        flex-direction: column;
+      }
+
+      nav {
+        gap: 16px;
+      }
+
+      nav a {
+        font-size: 15px;
+      }
+
+      .hero {
+        min-height: 65vh;
+      }
+
+      h1 {
+        font-size: clamp(65px, 18vw, 110px);
+      }
+
+      .gallery {
+        grid-template-columns: 1fr;
+        max-width: 350px;
+      }
+
+      .section {
+        padding: 65px 6%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .button {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="brand" href="#home">R.C. ✶</a>
+
+    <nav aria-label="Main navigation">
+      <a href="#home">Home</a>
+      <a href="#work">Portfolio</a>
+      <a href="#flash">Flash</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="hero" id="home">
+      <div class="ornament">✶ ⚓ ✶</div>
+
+      <p class="eyebrow">Tattoos & Original Art</p>
+
+      <h1>
+        ROYI<br>
+        <span>CASPI</span>
+      </h1>
+
+      <p class="subtitle">
+        Traditional Roots. Wandering Soul.
+      </p>
+
+      <a class="button" href="#work">
+        Explore My Work ↗
+      </a>
+    </section>
+
+    <section class="section" id="work">
+      <p class="section-label">✶ Ink & Artwork ✶</p>
+      <h2>Selected Work</h2>
+
+      <p class="intro">
+        Bold lines, timeless designs and
+        original artwork inspired by
+        traditional tattooing.
+      </p>
+
+      <div class="gallery">
+        <div class="art">
+          <div class="symbol">✶</div>
+          <p>Tattoo No. 01</p>
+        </div>
+
+        <div class="art">
+          <div class="symbol">⚓</div>
+          <p>Tattoo No. 02</p>
+        </div>
+
+        <div class="art">
+          <div class="symbol">✦</div>
+          <p>Tattoo No. 03</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section flash-section" id="flash">
+      <p class="section-label">✶ Ready To Ink ✶</p>
+      <h2>The Flash Book</h2>
+
+      <p class="intro">
+        Original flash designs,
+        made to find their next home.
+      </p>
+
+      <a class="button"
+         href="https://instagram.com/by_r.n.c"
+         target="_blank"
+         rel="noopener noreferrer">
+        Ask About Available Flash ↗
+      </a>
+    </section>
+
+    <section class="section" id="about">
+      <p class="section-label">✶ The Artist ✶</p>
+      <h2>Behind The Ink</h2>
+
+      <p class="about-text">
+        I'm Royi Caspi, an independent tattoo
+        artist with a love for bold lines,
+        old-school imagery, and the art
+        of wandering.
+        <br><br>
+        Every piece begins with an idea,
+        a story, and a little bit of soul.
+      </p>
+    </section>
+
+  </main>
+
+  <footer id="contact">
+    <div class="ornament">✶ ✶ ✶</div>
+
+    <h2>Let's Make Something Permanent.</h2>
+
+    <p>For tattoos, flash and collaborations:</p>
+
+    <a class="button"
+       href="https://instagram.com/by_r.n.c"
+       target="_blank"
+       rel="noopener noreferrer">
+      Book Through Instagram ↗
+    </a>
+
+    <p class="copyright">
+      © 2026 ROYI CASPI — TATTOOS & ART
+    </p>
+  </footer>
+
+</body>
+</html>
