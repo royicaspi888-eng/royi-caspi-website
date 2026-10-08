@@ -2,119 +2,420 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Royi Caspi | Tattoos & Art</title>
-  <style>
-    * { box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#171717">
+<meta name="description" content="Royi Caspi — Tattoos & Original Art">
+<title>Royi Caspi | Tattoos & Art</title>
 
-    body {
-      margin: 0;
-      background: #f4f0e8;
-      color: #171717;
-      font-family: Georgia, serif;
-    }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 24px 6%;
-      border-bottom: 2px solid #171717;
-    }
+<style>
+:root {
+  --paper: #f2ebdd;
+  --black: #171717;
+  --red: #ad3038;
+  --wine: #641d29;
+}
 
-    .logo {
-      font-size: 20px;
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
+* { box-sizing: border-box; }
 
-    nav a {
-      color: inherit;
-      text-decoration: none;
-      margin-left: 20px;
-      font: 12px Arial, sans-serif;
-    }
+html { scroll-behavior: smooth; }
 
-    main {
-      min-height: 75vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 40px 20px;
-    }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--black);
+  font-family: 'IM Fell English', Georgia, serif;
+}
 
-    .eyebrow {
-      font: 13px Arial, sans-serif;
-      letter-spacing: 4px;
-    }
+a { color: inherit; }
 
-    h1 {
-      font-size: clamp(55px, 12vw, 150px);
-      line-height: 0.9;
-      margin: 30px 0;
-    }
+header {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 6%;
+  background: var(--paper);
+  border-bottom: 2px solid var(--black);
+}
 
-    .subtitle {
-      font-size: 22px;
-      font-style: italic;
-    }
+.brand {
+  font-family: 'Pirata One', Georgia, serif;
+  font-size: 30px;
+  color: var(--wine);
+  text-decoration: none;
+}
 
-    .button {
-      margin-top: 35px;
-      padding: 16px 30px;
-      border: 2px solid #171717;
-      color: #171717;
-      text-decoration: none;
-      font: bold 13px Arial, sans-serif;
-      letter-spacing: 2px;
-    }
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
 
-    .button:hover {
-      background: #171717;
-      color: #f4f0e8;
-    }
+nav a {
+  text-decoration: none;
+  font-size: 17px;
+}
 
-    footer {
-      text-align: center;
-      padding: 25px;
-      border-top: 2px solid #171717;
-      font: 12px Arial, sans-serif;
-    }
+nav a:hover { color: var(--red); }
 
-    @media (max-width: 600px) {
-      header { flex-direction: column; gap: 20px; }
-      nav a { margin: 0 8px; }
-    }
-  </style>
+.hero {
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px;
+  overflow: hidden;
+  background: var(--black);
+  color: var(--paper);
+  text-align: center;
+}
+
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  background-image: url('IMG_1319.jpeg');
+  background-size: cover;
+  background-position: center 56%;
+  filter: grayscale(100%);
+  opacity: .65;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,.25),
+    rgba(0,0,0,.48) 50%,
+    rgba(0,0,0,.75)
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.small-heading {
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-size: 16px;
+}
+
+h1, h2, h3 {
+  font-family: 'Pirata One', Georgia, serif;
+  font-weight: 400;
+}
+
+h1 {
+  margin: 30px 0;
+  font-size: clamp(75px, 15vw, 185px);
+  line-height: .85;
+  letter-spacing: 2px;
+  text-shadow: 3px 5px 12px rgba(0,0,0,.5);
+}
+
+h1 span { color: #e5b7b7; }
+
+.hero-subtitle {
+  font-size: clamp(21px, 3vw, 30px);
+  font-style: italic;
+  margin-bottom: 35px;
+}
+
+.button {
+  display: inline-block;
+  padding: 15px 30px;
+  background: var(--red);
+  border: 2px solid var(--paper);
+  color: white;
+  font-size: 18px;
+  text-decoration: none;
+  transition: .2s;
+}
+
+.button:hover {
+  background: var(--wine);
+  transform: translateY(-3px);
+}
+
+section.content {
+  padding: 85px 7%;
+  text-align: center;
+  border-bottom: 2px solid var(--black);
+  scroll-margin-top: 20px;
+}
+
+.section-label {
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 15px;
+}
+
+h2 {
+  font-size: clamp(48px, 7vw, 80px);
+  margin: 15px 0 25px;
+}
+
+.description {
+  max-width: 650px;
+  margin: 0 auto 35px;
+  font-size: 22px;
+  line-height: 1.5;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1100px;
+  margin: 40px auto 0;
+}
+
+.placeholder {
+  aspect-ratio: 3 / 4;
+  border: 2px solid var(--black);
+  background: #e5d9c7;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  padding: 20px;
+}
+
+.placeholder span {
+  font-size: 65px;
+  color: var(--wine);
+}
+
+.placeholder p {
+  font-size: 20px;
+  font-style: italic;
+}
+
+.flash {
+  background: var(--black);
+  color: var(--paper);
+}
+
+.flash .section-label { color: #df999f; }
+
+.about {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  max-width: 1150px;
+  margin: auto;
+  text-align: left;
+}
+
+.about img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 3px solid var(--black);
+  filter: grayscale(100%);
+}
+
+.about-copy p {
+  font-size: 22px;
+  line-height: 1.6;
+}
+
+footer {
+  padding: 75px 20px 30px;
+  background: var(--wine);
+  color: var(--paper);
+  text-align: center;
+}
+
+footer h2 {
+  font-size: clamp(40px, 7vw, 75px);
+}
+
+footer p { font-size: 20px; }
+
+footer .copyright {
+  margin-top: 70px;
+  font-size: 14px;
+}
+
+@media (max-width: 700px) {
+  header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  nav {
+    justify-content: center;
+    gap: 15px;
+  }
+
+  nav a { font-size: 15px; }
+
+  .hero { min-height: 75vh; }
+
+  h1 { font-size: clamp(70px, 18vw, 120px); }
+
+  .gallery {
+    grid-template-columns: 1fr;
+    max-width: 350px;
+  }
+
+  .about {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .about-copy { text-align: center; }
+
+  section.content { padding: 65px 6%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .button { transition: none; }
+}
+</style>
 </head>
+
 <body>
-  <header>
-    <div class="logo">R.C.</div>
-    <nav>
-      <a href="#home">HOME</a>
-      <a href="#portfolio">PORTFOLIO</a>
-      <a href="#flash">FLASH</a>
-      <a href="#contact">CONTACT</a>
-    </nav>
-  </header>
 
-  <main id="home">
-    <p class="eyebrow">INDEPENDENT TATTOO ARTIST</p>
-    <h1>ROYI<br>CASPI</h1>
-    <p class="subtitle">Tattoos & Original Artwork</p>
-    <a class="button"
-       href="https://www.instagram.com/by_r.n.c/"
-       target="_blank"
-       rel="noopener noreferrer">
-      EXPLORE MY WORK ↗
+<header>
+  <a class="brand" href="#home">R.C. ✶</a>
+
+  <nav aria-label="Main navigation">
+    <a href="#home">Home</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#flash">Flash</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+
+<section class="hero" id="home">
+  <div class="hero-photo"></div>
+
+  <div class="hero-content">
+    <p class="small-heading">✶ Tattoos & Original Art ✶</p>
+
+    <h1>ROYI<br><span>CASPI</span></h1>
+
+    <p class="hero-subtitle">
+      Traditional Roots. Wandering Soul.
+    </p>
+
+    <a class="button" href="#portfolio">
+      Explore My Work ↗
     </a>
-  </main>
+  </div>
+</section>
 
-  <footer>
+<section class="content" id="portfolio">
+  <p class="section-label">✶ Ink & Art ✶</p>
+  <h2>Selected Work</h2>
+
+  <p class="description">
+    Bold lines, timeless imagery and
+    original artwork inspired by
+    traditional tattooing.
+  </p>
+
+  <div class="gallery">
+    <div class="placeholder">
+      <span>✶</span>
+      <p>Coming Soon</p>
+    </div>
+
+    <div class="placeholder">
+      <span>⚓</span>
+      <p>Coming Soon</p>
+    </div>
+
+    <div class="placeholder">
+      <span>✦</span>
+      <p>Coming Soon</p>
+    </div>
+  </div>
+</section>
+
+<section class="content flash" id="flash">
+  <p class="section-label">✶ Original Designs ✶</p>
+  <h2>The Flash Book</h2>
+
+  <p class="description">
+    A collection of original tattoo flash.
+    Old-school spirit, new stories.
+  </p>
+
+  <a class="button"
+     href="https://www.instagram.com/by_r.n.c/"
+     target="_blank"
+     rel="noopener noreferrer">
+    Ask About Flash ↗
+  </a>
+</section>
+
+<section class="content" id="about">
+  <div class="about">
+    <img
+      src="F4B07A57-4F89-4424-A0A4-8B516A1B9FB4.jpeg"
+      alt="Royi Caspi working on a tattoo"
+      loading="lazy">
+
+    <div class="about-copy">
+      <p class="section-label">✶ The Artist ✶</p>
+      <h2>Behind The Ink</h2>
+
+      <p>
+        I'm Royi Caspi, an independent tattoo
+        artist drawn to bold lines,
+        traditional imagery and original art.
+      </p>
+
+      <p>
+        Inspired by the road, the sea,
+        old stories and the timeless
+        spirit of tattooing.
+      </p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer id="contact">
+  <p>✶ ✶ ✶</p>
+  <h2>Let's Make Something Permanent.</h2>
+
+  <p>For tattoos, flash and collaborations.</p>
+
+  <a class="button"
+     href="https://www.instagram.com/by_r.n.c/"
+     target="_blank"
+     rel="noopener noreferrer">
+    Book Through Instagram ↗
+  </a>
+
+  <p class="copyright">
     © 2026 ROYI CASPI — TATTOOS & ART
-  </footer>
+  </p>
+</footer>
+
 </body>
 </html>
