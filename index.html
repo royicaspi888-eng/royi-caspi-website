@@ -20,13 +20,9 @@
   --wine: #641d29;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
@@ -35,36 +31,49 @@ body {
   font-family: 'IM Fell English', Georgia, serif;
 }
 
-body.modal-open {
-  overflow: hidden;
-}
+body.modal-open { overflow: hidden; }
 
-a {
-  color: inherit;
-}
-
-button {
-  font: inherit;
-  cursor: pointer;
-}
-
-/* HEADER */
+a { color: inherit; }
+button { font: inherit; cursor: pointer; }
 
 header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  padding: 18px 6%;
-  background: var(--paper);
-  border-bottom: 2px solid var(--ink);
+  padding: 10px 5%;
+  background: rgba(242,235,221,.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--wine);
+  box-shadow: 0 3px 16px rgba(23,23,23,.08);
 }
 
 .brand {
-  font-family: 'Pirata One', Georgia, serif;
-  font-size: 30px;
-  color: var(--wine);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
   text-decoration: none;
+  white-space: nowrap;
+}
+
+.brand-name {
+  font-family: 'Pirata One', Georgia, serif;
+  font-size: clamp(25px,3vw,37px);
+  color: var(--ink);
+}
+
+.brand-tag {
+  font-family: Georgia, serif;
+  font-size: 9px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: var(--wine);
+  margin-top: 5px;
 }
 
 nav {
@@ -76,13 +85,10 @@ nav {
 nav a {
   text-decoration: none;
   font-size: 17px;
+  transition: color .2s;
 }
 
-nav a:hover {
-  color: var(--red);
-}
-
-/* HERO */
+nav a:hover { color: var(--red); }
 
 .hero {
   position: relative;
@@ -136,18 +142,16 @@ h1, h2, h3 {
 
 h1 {
   margin: 30px 0;
-  font-size: clamp(75px, 15vw, 185px);
+  font-size: clamp(75px,15vw,185px);
   line-height: .85;
   letter-spacing: 2px;
   text-shadow: 3px 5px 12px rgba(0,0,0,.5);
 }
 
-h1 span {
-  color: #ad3038;
-}
+h1 span { color: var(--red); }
 
 .hero-subtitle {
-  font-size: clamp(21px, 3vw, 30px);
+  font-size: clamp(21px,3vw,30px);
   font-style: italic;
   margin-bottom: 35px;
 }
@@ -168,13 +172,11 @@ h1 span {
   transform: translateY(-3px);
 }
 
-/* SECTIONS */
-
 section.content {
   padding: 85px 7%;
   text-align: center;
   border-bottom: 2px solid var(--ink);
-  scroll-margin-top: 20px;
+  scroll-margin-top: 110px;
 }
 
 .section-label {
@@ -185,7 +187,7 @@ section.content {
 }
 
 h2 {
-  font-size: clamp(48px, 7vw, 80px);
+  font-size: clamp(48px,7vw,80px);
   margin: 15px 0 25px;
 }
 
@@ -195,8 +197,6 @@ h2 {
   font-size: 22px;
   line-height: 1.5;
 }
-
-/* GALLERY FILTERS */
 
 .gallery-filters {
   display: flex;
@@ -221,11 +221,11 @@ h2 {
   border-color: var(--wine);
 }
 
-/* MASONRY GALLERY */
+/* PINTEREST GALLERY */
 
 .masonry {
   columns: 3 230px;
-  column-gap: 18px;
+  column-gap: 15px;
   max-width: 1200px;
   margin: 35px auto 0;
   text-align: left;
@@ -237,41 +237,24 @@ h2 {
   margin: 0 0 18px;
   padding: 0;
   break-inside: avoid;
-  background: #e6dccd;
-  border: 1px solid rgba(23,23,23,.2);
-  color: var(--ink);
-  text-align: left;
+  border: 0;
+  border-radius: 15px;
+  background: transparent;
   overflow: hidden;
-  transition: transform .2s, box-shadow .2s;
-}
-
-.work-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 7px 9px 0 rgba(100,29,41,.25);
+  transition: transform .3s ease, box-shadow .3s ease;
 }
 
 .work-card img {
   display: block;
   width: 100%;
   height: auto;
+  border-radius: 15px;
+  transition: transform .35s ease;
 }
 
-.work-info {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 12px 15px;
-}
-
-.work-info strong {
-  font-size: 21px;
-  font-weight: normal;
-}
-
-.work-info small {
-  font-size: 14px;
-  color: var(--wine);
+.work-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(23,23,23,.15);
 }
 
 .gallery-note {
@@ -281,23 +264,32 @@ h2 {
   opacity: .7;
 }
 
-/* LIGHTBOX */
+/* FLOATING LIGHTBOX */
 
 .lightbox {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  display: none;
+  display: flex;
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0;
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: rgba(12,10,10,.94);
+  background: rgba(18,16,17,.68);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   color: var(--paper);
+  transition: opacity .28s ease, visibility .28s ease;
 }
 
 .lightbox.open {
-  display: flex;
+  visibility: visible;
+  pointer-events: auto;
 }
+
+.lightbox.visible { opacity: 1; }
 
 .lightbox-panel {
   position: relative;
@@ -305,28 +297,45 @@ h2 {
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  width: min(100%, 1000px);
+  width: min(100%,1000px);
   max-height: 100%;
+  transform: translateY(22px) scale(.96);
+  opacity: 0;
+  transition:
+    transform .36s cubic-bezier(.2,.8,.2,1),
+    opacity .3s ease;
+}
+
+.lightbox.visible .lightbox-panel {
+  transform: translateY(0) scale(1);
+  opacity: 1;
 }
 
 .lightbox-top {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  position: relative;
   gap: 20px;
   width: 100%;
+  padding: 0 48px;
 }
 
 .lightbox-title {
   margin: 0;
-  font-size: clamp(25px, 4vw, 42px);
+  font-size: clamp(24px,3vw,36px);
+  text-align: center;
 }
 
 .close-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
   width: 44px;
   height: 44px;
-  border: 1px solid var(--paper);
-  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0,0,0,.45);
   color: white;
   font-size: 27px;
 }
@@ -344,19 +353,22 @@ h2 {
 .lightbox-image {
   display: block;
   max-width: calc(100% - 112px);
-  max-height: min(68vh, 850px);
+  max-height: 72vh;
   width: auto;
   height: auto;
   object-fit: contain;
-  border: 2px solid rgba(242,235,221,.35);
+  border: 0;
+  border-radius: 14px;
+  box-shadow: 0 18px 60px rgba(0,0,0,.45);
 }
 
 .arrow {
   flex: 0 0 44px;
   width: 44px;
-  height: 54px;
-  border: 1px solid var(--paper);
-  background: var(--wine);
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(23,23,23,.65);
   color: white;
   font-size: 30px;
 }
@@ -367,55 +379,22 @@ h2 {
 }
 
 .lightbox-counter {
-  font-size: 17px;
+  font-size: 14px;
   letter-spacing: 2px;
 }
 
-.thumbnails {
-  display: flex;
-  justify-content: center;
-  gap: 9px;
-  max-width: 100%;
-  overflow-x: auto;
-  padding: 4px;
-}
-
-.thumb {
-  width: 60px;
-  height: 70px;
-  padding: 2px;
-  background: transparent;
-  border: 2px solid transparent;
-}
-
-.thumb.active {
-  border-color: var(--red);
-}
-
-.thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 .lightbox-caption {
-  font-size: 16px;
+  font-size: 15px;
   text-align: center;
   opacity: .85;
 }
-
-/* FLASH */
 
 .flash {
   background: var(--ink);
   color: var(--paper);
 }
 
-.flash .section-label {
-  color: #df999f;
-}
-
-/* ABOUT */
+.flash .section-label { color: #df999f; }
 
 .about {
   display: grid;
@@ -440,22 +419,16 @@ h2 {
   line-height: 1.6;
 }
 
-/* FOOTER */
-
 footer {
   padding: 75px 20px 30px;
   background: var(--wine);
   color: var(--paper);
   text-align: center;
+  scroll-margin-top: 110px;
 }
 
-footer h2 {
-  font-size: clamp(40px, 7vw, 75px);
-}
-
-footer p {
-  font-size: 20px;
-}
+footer h2 { font-size: clamp(40px,7vw,75px); }
+footer p { font-size: 20px; }
 
 footer .copyright {
   margin-top: 70px;
@@ -464,58 +437,64 @@ footer .copyright {
 
 /* MOBILE */
 
-@media (max-width: 700px) {
+@media (max-width:700px) {
   header {
     flex-direction: column;
-    gap: 12px;
+    padding: 9px 3%;
+    gap: 8px;
+  }
+
+  .brand-name { font-size: 28px; }
+
+  .brand-tag {
+    font-size: 7px;
+    letter-spacing: 1.5px;
   }
 
   nav {
     justify-content: center;
-    gap: 15px;
+    gap: 12px;
   }
 
-  nav a {
-    font-size: 15px;
-  }
+  nav a { font-size: 14px; }
 
-  .hero {
-    min-height: 75vh;
-  }
+  .hero { min-height: 75vh; }
 
   h1 {
-    font-size: clamp(70px, 18vw, 120px);
+    font-size: clamp(70px,18vw,120px);
   }
 
   section.content {
     padding: 65px 6%;
+    scroll-margin-top: 135px;
   }
+
+  footer { scroll-margin-top: 135px; }
 
   .masonry {
     columns: 2 145px;
-    column-gap: 12px;
+    column-gap: 10px;
   }
 
   .work-card {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+    border-radius: 12px;
   }
+
+  .work-card img { border-radius: 12px; }
 
   .about {
     grid-template-columns: 1fr;
     gap: 25px;
   }
 
-  .about-copy {
-    text-align: center;
-  }
+  .about-copy { text-align: center; }
 
-  .lightbox {
-    padding: 12px;
-  }
+  .lightbox { padding: 12px; }
 
   .lightbox-image {
     max-width: calc(100% - 80px);
-    max-height: 58vh;
+    max-height: 65vh;
   }
 
   .arrow {
@@ -526,13 +505,14 @@ footer .copyright {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+@media (prefers-reduced-motion:reduce) {
+  html { scroll-behavior: auto; }
 
   .work-card,
-  .button {
+  .button,
+  .lightbox,
+  .lightbox-panel,
+  .work-card img {
     transition: none;
   }
 }
@@ -542,7 +522,12 @@ footer .copyright {
 <body>
 
 <header>
-  <a class="brand" href="#home">R.C. ✶</a>
+  <a class="brand" href="#home">
+    <span class="brand-name">Royi Caspi</span>
+    <span class="brand-tag">
+      ✶ T A T T O O S &amp; A R T ✶
+    </span>
+  </a>
 
   <nav aria-label="Main navigation">
     <a href="#home">Home</a>
@@ -554,8 +539,6 @@ footer .copyright {
 </header>
 
 <main>
-
-<!-- HOME -->
 
 <section class="hero" id="home">
   <div class="hero-photo"></div>
@@ -580,16 +563,14 @@ footer .copyright {
   </div>
 </section>
 
-<!-- PORTFOLIO -->
-
 <section class="content" id="portfolio">
   <p class="section-label">✶ Ink & Art ✶</p>
 
   <h2>Selected Work</h2>
 
   <p class="description">
-    Bold lines, timeless imagery and
-    original artwork inspired by traditional tattooing.
+    Bold lines, timeless imagery and original artwork
+    inspired by traditional tattooing.
   </p>
 
   <div class="gallery-filters" aria-label="Filter works">
@@ -613,12 +594,8 @@ footer .copyright {
   </p>
 </section>
 
-<!-- FLASH -->
-
 <section class="content flash" id="flash">
-  <p class="section-label">
-    ✶ Original Designs ✶
-  </p>
+  <p class="section-label">✶ Original Designs ✶</p>
 
   <h2>The Flash Book</h2>
 
@@ -628,13 +605,12 @@ footer .copyright {
   </p>
 
   <a class="button"
-     href="#portfolio"
-     id="flashLink">
-    Explore Flash & Art ↗
+     href="https://www.instagram.com/by_r.n.c/"
+     target="_blank"
+     rel="noopener noreferrer">
+    Ask About Flash ↗
   </a>
 </section>
-
-<!-- ABOUT -->
 
 <section class="content" id="about">
   <div class="about">
@@ -644,9 +620,7 @@ footer .copyright {
       loading="lazy">
 
     <div class="about-copy">
-      <p class="section-label">
-        ✶ The Artist ✶
-      </p>
+      <p class="section-label">✶ The Artist ✶</p>
 
       <h2>Behind The Ink</h2>
 
@@ -666,8 +640,6 @@ footer .copyright {
 </section>
 
 </main>
-
-<!-- CONTACT -->
 
 <footer id="contact">
   <p>✶ ✶ ✶</p>
@@ -689,8 +661,6 @@ footer .copyright {
     © 2026 ROYI CASPI — TATTOOS & ART
   </p>
 </footer>
-
-<!-- IMAGE VIEWER -->
 
 <div class="lightbox"
      id="lightbox"
@@ -732,9 +702,6 @@ footer .copyright {
     <div class="lightbox-counter"
          id="photoCounter"></div>
 
-    <div class="thumbnails"
-         id="thumbnails"></div>
-
     <div class="lightbox-caption"
          id="lightboxCaption"></div>
 
@@ -743,7 +710,7 @@ footer .copyright {
 
 <script>
 
-/* ALL PORTFOLIO PROJECTS */
+/* ALL 14 PROJECTS */
 
 const works = [
   {
@@ -761,7 +728,7 @@ const works = [
     id: "lighthouse",
     title: "Traditional Lighthouse",
     category: "tattoo",
-    description: "Old-school lighthouse and flower",
+    description: "Old-school lighthouse with a red flower",
     photos: [
       "Lighthouse 1.jpeg",
       "Lighthouse 2.jpeg"
@@ -898,7 +865,6 @@ const lightbox = document.getElementById("lightbox");
 const lightboxTitle = document.getElementById("lightboxTitle");
 const lightboxImage = document.getElementById("lightboxImage");
 const photoCounter = document.getElementById("photoCounter");
-const thumbnails = document.getElementById("thumbnails");
 const lightboxCaption = document.getElementById("lightboxCaption");
 
 let activeWork = null;
@@ -926,6 +892,7 @@ function renderGallery(filter = "all") {
     const card = document.createElement("button");
     card.className = "work-card";
     card.type = "button";
+
     card.setAttribute(
       "aria-label",
       "View " + work.title
@@ -936,20 +903,7 @@ function renderGallery(filter = "all") {
     img.alt = work.description;
     img.loading = "lazy";
 
-    const info = document.createElement("div");
-    info.className = "work-info";
-
-    const title = document.createElement("strong");
-    title.textContent = work.title;
-
-    const count = document.createElement("small");
-    count.textContent =
-      work.photos.length === 1
-        ? "View work ↗"
-        : work.photos.length + " photos ↗";
-
-    info.append(title, count);
-    card.append(img, info);
+    card.appendChild(img);
 
     card.addEventListener("click", () => {
       openWork(work);
@@ -967,6 +921,11 @@ function openWork(work) {
   activePhoto = 0;
 
   lightbox.classList.add("open");
+
+  requestAnimationFrame(() => {
+    lightbox.classList.add("visible");
+  });
+
   lightbox.setAttribute("aria-hidden", "false");
   document.body.classList.add("modal-open");
 
@@ -991,43 +950,6 @@ function showPhoto() {
     (activePhoto + 1) + " / " + activeWork.photos.length;
 
   lightboxCaption.textContent = activeWork.description;
-
-  thumbnails.innerHTML = "";
-
-  activeWork.photos.forEach((photo, index) => {
-    const button = document.createElement("button");
-
-    button.className =
-      "thumb" + (index === activePhoto ? " active" : "");
-
-    button.type = "button";
-
-    button.setAttribute(
-      "aria-label",
-      "Show photo " + (index + 1)
-    );
-
-    const img = document.createElement("img");
-    img.src = photo;
-    img.alt = "";
-
-    button.appendChild(img);
-
-    button.addEventListener("click", () => {
-      activePhoto = index;
-      showPhoto();
-    });
-
-    thumbnails.appendChild(button);
-  });
-
-  const hasMultiplePhotos = activeWork.photos.length > 1;
-
-  document.getElementById("prevPhoto").style.visibility =
-    hasMultiplePhotos ? "visible" : "hidden";
-
-  document.getElementById("nextPhoto").style.visibility =
-    hasMultiplePhotos ? "visible" : "hidden";
 }
 
 /* CHANGE PHOTO */
@@ -1046,10 +968,11 @@ function changePhoto(direction) {
 /* CLOSE LIGHTBOX */
 
 function closeLightbox() {
+  lightbox.classList.remove("visible");
   lightbox.classList.remove("open");
   lightbox.setAttribute("aria-hidden", "true");
-  document.body.classList.remove("modal-open");
 
+  document.body.classList.remove("modal-open");
   activeWork = null;
 
   if (lastFocusedElement) {
@@ -1094,9 +1017,7 @@ document.addEventListener("keydown", event => {
   if (event.key === "Tab") {
     const controls = [
       ...lightbox.querySelectorAll("button")
-    ].filter(button =>
-      getComputedStyle(button).visibility !== "hidden"
-    );
+    ];
 
     const first = controls[0];
     const last = controls[controls.length - 1];
@@ -1140,32 +1061,21 @@ lightboxImage.addEventListener(
 
 /* FILTER BUTTONS */
 
-function activateFilter(filter) {
-  document.querySelectorAll(".filter-btn").forEach(button => {
-    const isActive = button.dataset.filter === filter;
-    button.classList.toggle("active", isActive);
-    button.setAttribute("aria-pressed", String(isActive));
-  });
-
-  renderGallery(filter);
-}
-
 document.querySelectorAll(".filter-btn").forEach(button => {
   button.addEventListener("click", () => {
-    activateFilter(button.dataset.filter);
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    renderGallery(button.dataset.filter);
   });
 });
 
-/* FLASH SECTION LINK */
-
-document.getElementById("flashLink")
-  .addEventListener("click", () => {
-    activateFilter("flash");
-  });
-
 /* INITIALIZE */
 
-activateFilter("all");
+renderGallery();
 
 </script>
 
