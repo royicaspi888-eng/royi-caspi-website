@@ -531,6 +531,15 @@ footer .copyright {
     transition: none;
   }
 }
+
+/* Thumbnail navigation keeps the original masonry portfolio intact. */
+.photo-strip { display:flex; max-width:100%; gap:9px; overflow-x:auto; padding:5px 4px 10px; justify-content:flex-start; scrollbar-width:thin; }
+.photo-strip[hidden] { display:none; }
+.photo-thumb { flex:0 0 62px; width:62px; height:62px; padding:2px; border:2px solid transparent; background:transparent; opacity:.65; border-radius:3px; }
+.photo-thumb.active { border-color:var(--paper); opacity:1; }
+.photo-thumb:focus-visible { outline:2px solid var(--red); outline-offset:2px; }
+.photo-thumb img { display:block; width:100%; height:100%; object-fit:cover; }
+@media(max-width:700px) { .lightbox { padding:12px; } .lightbox-image { max-height:60dvh; } .photo-thumb { flex-basis:52px; width:52px; height:52px; } }
 </style>
 </head>
 
@@ -714,6 +723,7 @@ footer .copyright {
 
     <div class="lightbox-caption"
          id="lightboxCaption"></div>
+    <div class="photo-strip" id="photoStrip" aria-label="Project photos"></div>
 
   </div>
 </div>
@@ -941,6 +951,34 @@ function renderGallery(filter = "all") {
   });
 }
 
+/* PROJECT PHOTO THUMBNAILS */
+function renderPhotoStrip() {
+  const strip = document.getElementById("photoStrip");
+  strip.replaceChildren();
+  if (!activeWork || activeWork.photos.length < 2) {
+    strip.hidden = true;
+    return;
+  }
+  strip.hidden = false;
+  activeWork.photos.forEach((src, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "photo-thumb" + (index === activePhoto ? " active" : "");
+    button.setAttribute("aria-label", "Photo " + (index + 1));
+    button.setAttribute("aria-pressed", String(index === activePhoto));
+    const image = document.createElement("img");
+    image.src = src;
+    image.alt = "";
+    image.loading = "lazy";
+    button.appendChild(image);
+    button.addEventListener("click", () => {
+      activePhoto = index;
+      showPhoto();
+    });
+    strip.appendChild(button);
+  });
+}
+
 /* OPEN LIGHTBOX */
 
 function openWork(work) {
@@ -978,6 +1016,7 @@ function showPhoto() {
     (activePhoto + 1) + " / " + activeWork.photos.length;
 
   lightboxCaption.textContent = activeWork.description;
+  renderPhotoStrip();
 }
 
 /* CHANGE PHOTO */
