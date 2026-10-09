@@ -20,8 +20,13 @@
   --wine: #641d29;
 }
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   margin: 0;
@@ -30,9 +35,20 @@ body {
   font-family: 'IM Fell English', Georgia, serif;
 }
 
-body.modal-open { overflow: hidden; }
-a { color: inherit; }
-button { font: inherit; cursor: pointer; }
+body.modal-open {
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+/* HEADER */
 
 header {
   display: flex;
@@ -62,7 +78,11 @@ nav a {
   font-size: 17px;
 }
 
-nav a:hover { color: var(--red); }
+nav a:hover {
+  color: var(--red);
+}
+
+/* HERO */
 
 .hero {
   position: relative;
@@ -122,7 +142,9 @@ h1 {
   text-shadow: 3px 5px 12px rgba(0,0,0,.5);
 }
 
-h1 span { color: #e5b7b7; }
+h1 span {
+  color: #ad3038;
+}
 
 .hero-subtitle {
   font-size: clamp(21px, 3vw, 30px);
@@ -145,6 +167,8 @@ h1 span { color: #e5b7b7; }
   background: var(--wine);
   transform: translateY(-3px);
 }
+
+/* SECTIONS */
 
 section.content {
   padding: 85px 7%;
@@ -172,7 +196,7 @@ h2 {
   line-height: 1.5;
 }
 
-/* PINTEREST GALLERY */
+/* GALLERY FILTERS */
 
 .gallery-filters {
   display: flex;
@@ -196,6 +220,8 @@ h2 {
   color: white;
   border-color: var(--wine);
 }
+
+/* MASONRY GALLERY */
 
 .masonry {
   columns: 3 230px;
@@ -269,7 +295,9 @@ h2 {
   color: var(--paper);
 }
 
-.lightbox.open { display: flex; }
+.lightbox.open {
+  display: flex;
+}
 
 .lightbox-panel {
   position: relative;
@@ -333,7 +361,8 @@ h2 {
   font-size: 30px;
 }
 
-.arrow:hover, .close-btn:hover {
+.arrow:hover,
+.close-btn:hover {
   background: var(--red);
 }
 
@@ -359,7 +388,9 @@ h2 {
   border: 2px solid transparent;
 }
 
-.thumb.active { border-color: #e5b7b7; }
+.thumb.active {
+  border-color: var(--red);
+}
 
 .thumb img {
   width: 100%;
@@ -373,14 +404,18 @@ h2 {
   opacity: .85;
 }
 
-/* OTHER SECTIONS */
+/* FLASH */
 
 .flash {
   background: var(--ink);
   color: var(--paper);
 }
 
-.flash .section-label { color: #df999f; }
+.flash .section-label {
+  color: #df999f;
+}
+
+/* ABOUT */
 
 .about {
   display: grid;
@@ -405,6 +440,8 @@ h2 {
   line-height: 1.6;
 }
 
+/* FOOTER */
+
 footer {
   padding: 75px 20px 30px;
   background: var(--wine);
@@ -416,12 +453,16 @@ footer h2 {
   font-size: clamp(40px, 7vw, 75px);
 }
 
-footer p { font-size: 20px; }
+footer p {
+  font-size: 20px;
+}
 
 footer .copyright {
   margin-top: 70px;
   font-size: 14px;
 }
+
+/* MOBILE */
 
 @media (max-width: 700px) {
   header {
@@ -434,27 +475,43 @@ footer .copyright {
     gap: 15px;
   }
 
-  nav a { font-size: 15px; }
-  .hero { min-height: 75vh; }
-  h1 { font-size: clamp(70px, 18vw, 120px); }
+  nav a {
+    font-size: 15px;
+  }
 
-  section.content { padding: 65px 6%; }
+  .hero {
+    min-height: 75vh;
+  }
+
+  h1 {
+    font-size: clamp(70px, 18vw, 120px);
+  }
+
+  section.content {
+    padding: 65px 6%;
+  }
 
   .masonry {
     columns: 2 145px;
     column-gap: 12px;
   }
 
-  .work-card { margin-bottom: 12px; }
+  .work-card {
+    margin-bottom: 12px;
+  }
 
   .about {
     grid-template-columns: 1fr;
     gap: 25px;
   }
 
-  .about-copy { text-align: center; }
+  .about-copy {
+    text-align: center;
+  }
 
-  .lightbox { padding: 12px; }
+  .lightbox {
+    padding: 12px;
+  }
 
   .lightbox-image {
     max-width: calc(100% - 80px);
@@ -470,8 +527,14 @@ footer .copyright {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .work-card, .button { transition: none; }
+  html {
+    scroll-behavior: auto;
+  }
+
+  .work-card,
+  .button {
+    transition: none;
+  }
 }
 </style>
 </head>
@@ -480,6 +543,7 @@ footer .copyright {
 
 <header>
   <a class="brand" href="#home">R.C. ✶</a>
+
   <nav aria-label="Main navigation">
     <a href="#home">Home</a>
     <a href="#portfolio">Portfolio</a>
@@ -491,22 +555,36 @@ footer .copyright {
 
 <main>
 
+<!-- HOME -->
+
 <section class="hero" id="home">
   <div class="hero-photo"></div>
+
   <div class="hero-content">
-    <p class="small-heading">✶ Tattoos & Original Art ✶</p>
-    <h1>ROYI<br><span>CASPI</span></h1>
+    <p class="small-heading">
+      ✶ Tattoos & Original Art ✶
+    </p>
+
+    <h1>
+      ROYI<br>
+      <span>CASPI</span>
+    </h1>
+
     <p class="hero-subtitle">
       Traditional Roots. Wandering Soul.
     </p>
+
     <a class="button" href="#portfolio">
       Explore My Work ↗
     </a>
   </div>
 </section>
 
+<!-- PORTFOLIO -->
+
 <section class="content" id="portfolio">
   <p class="section-label">✶ Ink & Art ✶</p>
+
   <h2>Selected Work</h2>
 
   <p class="description">
@@ -518,9 +596,11 @@ footer .copyright {
     <button class="filter-btn active" data-filter="all">
       All Work
     </button>
+
     <button class="filter-btn" data-filter="tattoo">
       Tattoos
     </button>
+
     <button class="filter-btn" data-filter="flash">
       Flash & Art
     </button>
@@ -533,8 +613,13 @@ footer .copyright {
   </p>
 </section>
 
+<!-- FLASH -->
+
 <section class="content flash" id="flash">
-  <p class="section-label">✶ Original Designs ✶</p>
+  <p class="section-label">
+    ✶ Original Designs ✶
+  </p>
+
   <h2>The Flash Book</h2>
 
   <p class="description">
@@ -543,12 +628,13 @@ footer .copyright {
   </p>
 
   <a class="button"
-     href="https://www.instagram.com/by_r.n.c/"
-     target="_blank"
-     rel="noopener noreferrer">
-    Ask About Flash ↗
+     href="#portfolio"
+     id="flashLink">
+    Explore Flash & Art ↗
   </a>
 </section>
+
+<!-- ABOUT -->
 
 <section class="content" id="about">
   <div class="about">
@@ -558,7 +644,10 @@ footer .copyright {
       loading="lazy">
 
     <div class="about-copy">
-      <p class="section-label">✶ The Artist ✶</p>
+      <p class="section-label">
+        ✶ The Artist ✶
+      </p>
+
       <h2>Behind The Ink</h2>
 
       <p>
@@ -578,10 +667,16 @@ footer .copyright {
 
 </main>
 
+<!-- CONTACT -->
+
 <footer id="contact">
   <p>✶ ✶ ✶</p>
+
   <h2>Let's Make Something Permanent.</h2>
-  <p>For tattoos, flash and collaborations.</p>
+
+  <p>
+    For tattoos, flash and collaborations.
+  </p>
 
   <a class="button"
      href="https://www.instagram.com/by_r.n.c/"
@@ -595,7 +690,7 @@ footer .copyright {
   </p>
 </footer>
 
-<!-- FLOATING IMAGE VIEWER -->
+<!-- IMAGE VIEWER -->
 
 <div class="lightbox"
      id="lightbox"
@@ -605,17 +700,23 @@ footer .copyright {
      aria-hidden="true">
 
   <div class="lightbox-panel">
+
     <div class="lightbox-top">
       <h3 class="lightbox-title" id="lightboxTitle"></h3>
+
       <button class="close-btn"
               id="closeLightbox"
-              aria-label="Close gallery">×</button>
+              aria-label="Close gallery">
+        ×
+      </button>
     </div>
 
     <div class="lightbox-viewer">
       <button class="arrow"
               id="prevPhoto"
-              aria-label="Previous photo">‹</button>
+              aria-label="Previous photo">
+        ‹
+      </button>
 
       <img class="lightbox-image"
            id="lightboxImage"
@@ -623,21 +724,26 @@ footer .copyright {
 
       <button class="arrow"
               id="nextPhoto"
-              aria-label="Next photo">›</button>
+              aria-label="Next photo">
+        ›
+      </button>
     </div>
 
-    <div class="lightbox-counter" id="photoCounter"></div>
-    <div class="thumbnails" id="thumbnails"></div>
-    <div class="lightbox-caption" id="lightboxCaption"></div>
+    <div class="lightbox-counter"
+         id="photoCounter"></div>
+
+    <div class="thumbnails"
+         id="thumbnails"></div>
+
+    <div class="lightbox-caption"
+         id="lightboxCaption"></div>
+
   </div>
 </div>
 
 <script>
-/*
-  ADD NEW WORKS HERE LATER.
-  Each work has one gallery card
-  and as many photos as you want.
-*/
+
+/* ALL PORTFOLIO PROJECTS */
 
 const works = [
   {
@@ -650,8 +756,142 @@ const works = [
       "heart-2.jpg",
       "heart-3.jpg"
     ]
+  },
+  {
+    id: "lighthouse",
+    title: "Traditional Lighthouse",
+    category: "tattoo",
+    description: "Old-school lighthouse and flower",
+    photos: [
+      "Lighthouse 1.jpeg",
+      "Lighthouse 2.jpeg"
+    ]
+  },
+  {
+    id: "snake-dagger",
+    title: "Snake & Dagger",
+    category: "tattoo",
+    description: "Snake and dagger tattoo",
+    photos: [
+      "Snake and dagger 1.jpeg",
+      "Snake and dagger 2.jpeg"
+    ]
+  },
+  {
+    id: "koi-fish",
+    title: "Koi Fish",
+    category: "tattoo",
+    description: "Two koi fish",
+    photos: [
+      "Koi fish 1.jpeg",
+      "Koi fish 2.jpeg"
+    ]
+  },
+  {
+    id: "bear",
+    title: "The Bear",
+    category: "tattoo",
+    description: "Blackwork bear tattoo",
+    photos: [
+      "Bear 1.jpeg",
+      "Bear 2.jpeg"
+    ]
+  },
+  {
+    id: "bats",
+    title: "Bats",
+    category: "tattoo",
+    description: "Black silhouette bats",
+    photos: [
+      "Bats 1.JPG",
+      "Bats 2.jpeg",
+      "Bats 3.jpeg",
+      "Bats 4.jpeg"
+    ]
+  },
+  {
+    id: "palm-trees",
+    title: "Palm Trees",
+    category: "tattoo",
+    description: "Windblown palm trees",
+    photos: [
+      "Palm trees 1.jpeg",
+      "Palm trees 2.jpeg"
+    ]
+  },
+  {
+    id: "wanderer",
+    title: "The Wanderer",
+    category: "tattoo",
+    description: "Wandering musician and animals",
+    photos: [
+      "Shepherd 1.jpeg",
+      "Shepherd 2.jpeg",
+      "Shepherd 3.jpeg",
+      "Shepherd 4.jpeg"
+    ]
+  },
+  {
+    id: "ship",
+    title: "Up Is Down",
+    category: "tattoo",
+    description: "Blackwork sailing ship",
+    photos: [
+      "Up is down 1.jpeg",
+      "Up is down 2.jpeg"
+    ]
+  },
+  {
+    id: "tiger",
+    title: "Tiger",
+    category: "tattoo",
+    description: "Tiger tattoo",
+    photos: [
+      "Tiger 1.jpeg",
+      "Tiger 2.jpeg"
+    ]
+  },
+  {
+    id: "sniper",
+    title: "Sniper",
+    category: "tattoo",
+    description: "Fine-line rifle tattoo",
+    photos: [
+      "Sniper 1.jpeg",
+      "Sniper 2.jpeg"
+    ]
+  },
+  {
+    id: "enso",
+    title: "Enso",
+    category: "tattoo",
+    description: "Expressive black ink circle",
+    photos: [
+      "I’m yours 1.jpeg",
+      "I’m yours 2.jpeg"
+    ]
+  },
+  {
+    id: "cashew",
+    title: "Cashew",
+    category: "tattoo",
+    description: "Botanical cashew illustration",
+    photos: [
+      "Casew.jpeg"
+    ]
+  },
+  {
+    id: "snake-dagger-art",
+    title: "Snake & Dagger — Artwork",
+    category: "flash",
+    description: "Original snake and dagger illustration",
+    photos: [
+      "Snake and dagger flash.jpeg"
+    ]
   }
 ];
+
+/* ELEMENTS */
 
 const gallery = document.getElementById("gallery");
 const lightbox = document.getElementById("lightbox");
@@ -664,6 +904,8 @@ const lightboxCaption = document.getElementById("lightboxCaption");
 let activeWork = null;
 let activePhoto = 0;
 let lastFocusedElement = null;
+
+/* RENDER GALLERY */
 
 function renderGallery(filter = "all") {
   gallery.innerHTML = "";
@@ -684,7 +926,10 @@ function renderGallery(filter = "all") {
     const card = document.createElement("button");
     card.className = "work-card";
     card.type = "button";
-    card.setAttribute("aria-label", "View " + work.title);
+    card.setAttribute(
+      "aria-label",
+      "View " + work.title
+    );
 
     const img = document.createElement("img");
     img.src = work.photos[0];
@@ -698,16 +943,23 @@ function renderGallery(filter = "all") {
     title.textContent = work.title;
 
     const count = document.createElement("small");
-    count.textContent = work.photos.length + " photos ↗";
+    count.textContent =
+      work.photos.length === 1
+        ? "View work ↗"
+        : work.photos.length + " photos ↗";
 
     info.append(title, count);
     card.append(img, info);
 
-    card.addEventListener("click", () => openWork(work));
+    card.addEventListener("click", () => {
+      openWork(work);
+    });
 
     gallery.appendChild(card);
   });
 }
+
+/* OPEN LIGHTBOX */
 
 function openWork(work) {
   lastFocusedElement = document.activeElement;
@@ -719,14 +971,19 @@ function openWork(work) {
   document.body.classList.add("modal-open");
 
   showPhoto();
+
   document.getElementById("closeLightbox").focus();
 }
+
+/* DISPLAY PHOTO */
 
 function showPhoto() {
   if (!activeWork) return;
 
   lightboxTitle.textContent = activeWork.title;
+
   lightboxImage.src = activeWork.photos[activePhoto];
+
   lightboxImage.alt =
     activeWork.title + " — photo " + (activePhoto + 1);
 
@@ -739,11 +996,15 @@ function showPhoto() {
 
   activeWork.photos.forEach((photo, index) => {
     const button = document.createElement("button");
+
     button.className =
       "thumb" + (index === activePhoto ? " active" : "");
 
+    button.type = "button";
+
     button.setAttribute(
-      "aria-label", "Show photo " + (index + 1)
+      "aria-label",
+      "Show photo " + (index + 1)
     );
 
     const img = document.createElement("img");
@@ -751,6 +1012,7 @@ function showPhoto() {
     img.alt = "";
 
     button.appendChild(img);
+
     button.addEventListener("click", () => {
       activePhoto = index;
       showPhoto();
@@ -758,26 +1020,44 @@ function showPhoto() {
 
     thumbnails.appendChild(button);
   });
+
+  const hasMultiplePhotos = activeWork.photos.length > 1;
+
+  document.getElementById("prevPhoto").style.visibility =
+    hasMultiplePhotos ? "visible" : "hidden";
+
+  document.getElementById("nextPhoto").style.visibility =
+    hasMultiplePhotos ? "visible" : "hidden";
 }
+
+/* CHANGE PHOTO */
 
 function changePhoto(direction) {
   if (!activeWork) return;
 
   const count = activeWork.photos.length;
-  activePhoto = (activePhoto + direction + count) % count;
+
+  activePhoto =
+    (activePhoto + direction + count) % count;
+
   showPhoto();
 }
+
+/* CLOSE LIGHTBOX */
 
 function closeLightbox() {
   lightbox.classList.remove("open");
   lightbox.setAttribute("aria-hidden", "true");
   document.body.classList.remove("modal-open");
+
   activeWork = null;
 
   if (lastFocusedElement) {
     lastFocusedElement.focus();
   }
 }
+
+/* BUTTON EVENTS */
 
 document.getElementById("closeLightbox")
   .addEventListener("click", closeLightbox);
@@ -789,22 +1069,40 @@ document.getElementById("nextPhoto")
   .addEventListener("click", () => changePhoto(1));
 
 lightbox.addEventListener("click", event => {
-  if (event.target === lightbox) closeLightbox();
+  if (event.target === lightbox) {
+    closeLightbox();
+  }
 });
+
+/* KEYBOARD NAVIGATION */
 
 document.addEventListener("keydown", event => {
   if (!activeWork) return;
 
-  if (event.key === "Escape") closeLightbox();
-  if (event.key === "ArrowRight") changePhoto(1);
-  if (event.key === "ArrowLeft") changePhoto(-1);
+  if (event.key === "Escape") {
+    closeLightbox();
+  }
+
+  if (event.key === "ArrowRight") {
+    changePhoto(1);
+  }
+
+  if (event.key === "ArrowLeft") {
+    changePhoto(-1);
+  }
 
   if (event.key === "Tab") {
-    const controls = [...lightbox.querySelectorAll("button")];
+    const controls = [
+      ...lightbox.querySelectorAll("button")
+    ].filter(button =>
+      getComputedStyle(button).visibility !== "hidden"
+    );
+
     const first = controls[0];
     const last = controls[controls.length - 1];
 
-    if (event.shiftKey && document.activeElement === first) {
+    if (event.shiftKey &&
+        document.activeElement === first) {
       event.preventDefault();
       last.focus();
     } else if (!event.shiftKey &&
@@ -815,37 +1113,60 @@ document.addEventListener("keydown", event => {
   }
 });
 
-/* Swipe between photos on touch screens */
+/* TOUCH SWIPE */
 
 let touchStartX = 0;
 
-lightboxImage.addEventListener("touchstart", event => {
-  touchStartX = event.changedTouches[0].screenX;
-}, { passive: true });
+lightboxImage.addEventListener(
+  "touchstart",
+  event => {
+    touchStartX = event.changedTouches[0].screenX;
+  },
+  { passive: true }
+);
 
-lightboxImage.addEventListener("touchend", event => {
-  const distance =
-    event.changedTouches[0].screenX - touchStartX;
+lightboxImage.addEventListener(
+  "touchend",
+  event => {
+    const distance =
+      event.changedTouches[0].screenX - touchStartX;
 
-  if (Math.abs(distance) > 50) {
-    changePhoto(distance < 0 ? 1 : -1);
-  }
-}, { passive: true });
+    if (Math.abs(distance) > 50) {
+      changePhoto(distance < 0 ? 1 : -1);
+    }
+  },
+  { passive: true }
+);
 
-/* Gallery category filters */
+/* FILTER BUTTONS */
+
+function activateFilter(filter) {
+  document.querySelectorAll(".filter-btn").forEach(button => {
+    const isActive = button.dataset.filter === filter;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+
+  renderGallery(filter);
+}
 
 document.querySelectorAll(".filter-btn").forEach(button => {
   button.addEventListener("click", () => {
-    document.querySelectorAll(".filter-btn").forEach(btn => {
-      btn.classList.remove("active");
-    });
-
-    button.classList.add("active");
-    renderGallery(button.dataset.filter);
+    activateFilter(button.dataset.filter);
   });
 });
 
-renderGallery();
+/* FLASH SECTION LINK */
+
+document.getElementById("flashLink")
+  .addEventListener("click", () => {
+    activateFilter("flash");
+  });
+
+/* INITIALIZE */
+
+activateFilter("all");
+
 </script>
 
 </body>
