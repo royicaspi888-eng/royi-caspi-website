@@ -581,6 +581,21 @@ footer .copyright {
 .flash-price{font-size:.9rem;opacity:.75;margin:0 auto 25px}
 @media(max-width:700px){.flash-marquee-viewport{padding:34px 10px}.flash-marquee-track{gap:12px}.flash-marquee-track button img{height:145px}.flash-preview img{max-height:215px}.flash-edge-arrow{width:36px;height:36px;font-size:24px}}
 @media(prefers-reduced-motion:reduce){.flash-marquee-viewport{scroll-behavior:auto}.flash-marquee-track button{transition:none}}
+/* Small-screen header: centered brand, independent language switch and one-line navigation. */
+@media(max-width:700px){
+  header,body.hebrew header{position:sticky;flex-direction:column;align-items:center;justify-content:center;gap:11px;padding:12px 10px 10px}
+  header .brand{align-self:center}
+  header .header-actions,body.hebrew header .header-actions{width:100%;flex:none;display:block;margin:0;min-width:0}
+  header nav,body.hebrew header nav{position:static;display:flex;width:100%;max-width:100%;flex-wrap:nowrap;justify-content:center;align-items:center;gap:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;white-space:nowrap;padding:0 1px;-webkit-overflow-scrolling:touch}
+  header nav::-webkit-scrollbar{display:none}
+  header nav a,body.hebrew header nav a{flex:none;font-size:clamp(11px,3vw,13px);padding-inline:6px;line-height:1.6}
+  header .language-switch{position:absolute;top:18px;right:12px;left:auto;padding:2px;gap:0}
+  body.hebrew header .language-switch{right:auto;left:12px}
+  header .language-switch button{padding:3px 5px;font-size:10px;min-width:26px}
+}
+@media(max-width:370px){
+  header nav a,body.hebrew header nav a{font-size:11px;padding-inline:4px}
+}
 /* Thumbnail navigation keeps the original masonry portfolio intact. */
 .photo-strip { display:flex; max-width:100%; gap:9px; overflow-x:auto; padding:5px 4px 10px; justify-content:flex-start; scrollbar-width:thin; }
 .photo-strip[hidden] { display:none; }
@@ -1051,8 +1066,17 @@ function showFlashPreview(index){
 }
 document.getElementById("flashPrev").addEventListener("click",()=>showFlashPreview(flashPreviewIndex-1));
 document.getElementById("flashNext").addEventListener("click",()=>showFlashPreview(flashPreviewIndex+1));
-flashPreview.addEventListener("mouseleave",()=>{flashPreview.hidden=true});
-flashPreview.addEventListener("keydown",e=>{if(e.key==="Escape")flashPreview.hidden=true});
+function closeFlashPreview(){
+  flashPreview.hidden=true;
+  marqueeHovered=false;
+  marqueeManualTarget=null;
+  marqueePausedUntil=performance.now()+250;
+}
+flashPreview.addEventListener("click",event=>{
+  if(event.target===flashPreview)closeFlashPreview();
+});
+flashPreview.addEventListener("mouseleave",()=>closeFlashPreview());
+flashPreview.addEventListener("keydown",e=>{if(e.key==="Escape")closeFlashPreview()});
 function buildMarquee(){
   for(let round=0;round<2;round++) marqueeFiles.forEach((src,index)=>{
     const work=works.find(item=>item.photos[0]===src);
@@ -1075,6 +1099,7 @@ let marqueeOffset=0;
 let marqueeManualTarget=null;
 let marqueeHovered=false;
 let marqueeTouchActive=false;
+let marqueeIgnoreHoverUntil=0;
 let suppressFlashClick=false;
 const marqueeCanHover=window.matchMedia("(hover: hover) and (pointer: fine)");
 function marqueeLoopWidth(){
@@ -1098,7 +1123,7 @@ function marqueeTick(now){
       const step=Math.sign(distance)*Math.min(Math.abs(distance),elapsed*0.85);
       marqueeOffset+=step;
       if(Math.abs(distance)<0.8){marqueeOffset=marqueeManualTarget;marqueeManualTarget=null;}
-    }else if(!marqueeHovered&&!marqueeTouchActive&&flashPreview.hidden&&now>marqueePausedUntil){
+    }else if((!marqueeHovered||now<marqueeIgnoreHoverUntil)&&!marqueeTouchActive&&flashPreview.hidden&&now>marqueePausedUntil){
       marqueeOffset+=elapsed*0.04;
     }
     marqueeOffset=((marqueeOffset%loop)+loop)%loop;
@@ -1130,6 +1155,7 @@ marqueeViewport.addEventListener("touchstart",event=>{
   swipeStartY=touch.clientY;
   swipeMoved=false;swipeHorizontal=false;
   marqueeTouchActive=true;
+  marqueeHovered=false;
   marqueeManualTarget=null;
 },{passive:true});
 marqueeViewport.addEventListener("touchmove",event=>{
@@ -1152,7 +1178,10 @@ function endMarqueeTouch(){
     setTimeout(()=>{suppressFlashClick=false},350);
   }
   marqueeTouchActive=false;
-  marqueePausedUntil=performance.now()+1500;
+  marqueeHovered=false;
+  marqueeIgnoreHoverUntil=performance.now()+5000;
+  marqueeManualTarget=null;
+  marqueePausedUntil=performance.now()+900;
 }
 marqueeViewport.addEventListener("touchend",endMarqueeTouch,{passive:true});
 marqueeViewport.addEventListener("touchcancel",endMarqueeTouch,{passive:true});
