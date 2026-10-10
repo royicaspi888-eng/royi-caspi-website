@@ -538,6 +538,11 @@ footer .copyright {
 }
 
 /* Subtle, continuously moving available-flash strip. */
+.flash-price{font-size:.9rem;opacity:.75;margin:0 auto 25px}
+.flash-marquee-track button{display:block;flex:none;padding:0;border:0;background:transparent;border-radius:8px;cursor:zoom-in;transition:transform .22s ease,box-shadow .22s ease;position:relative}
+.flash-marquee-track button:hover,.flash-marquee-track button:focus-visible{transform:scale(1.09);z-index:2;box-shadow:0 12px 30px rgba(0,0,0,.45);outline:2px solid var(--paper);outline-offset:2px}
+.flash-marquee-track button img{display:block}
+.flash-marquee:has(button:focus-visible) .flash-marquee-track{animation-play-state:paused}
 .flash-marquee{width:100%;max-width:1200px;margin:28px auto 34px;overflow:hidden;direction:ltr;mask-image:linear-gradient(to right,transparent,#000 5%,#000 95%,transparent)}
 .flash-marquee-track{display:flex;align-items:center;gap:16px;width:max-content;animation:flash-drift 48s linear infinite}
 .flash-marquee-track img{height:190px;width:auto;max-width:270px;object-fit:contain;border-radius:8px;flex:none}
@@ -641,9 +646,9 @@ footer .copyright {
     Old-school spirit, new stories.
   </p>
 
-  <p data-i18n="flashPrice" style="font-size:0.9rem;opacity:0.75;margin-top:0.3rem;">Friendly prices on selected flash designs.</p>
-
   <div class="flash-marquee" aria-label="Available tattoo flash designs"><div class="flash-marquee-track" id="flashMarqueeTrack"></div></div>
+
+  <p class="flash-price" data-i18n="flashPrice">Friendly prices on selected flash designs.</p>
 
   <a class="button" href="#portfolio" id="flashGalleryLink" data-i18n="viewFlash">View Flash Gallery</a>
 </section>
@@ -987,8 +992,16 @@ const marqueeFiles = newArt.filter((entry,index)=>index!==0).map(entry=>entry[0]
 const marqueeTrack = document.getElementById("flashMarqueeTrack");
 function buildMarquee(){
   for(let round=0;round<2;round++) marqueeFiles.forEach((src,index)=>{
-    const image=document.createElement("img");image.src=src;image.alt=round===0?newArt[index+1][1]:"";image.loading="lazy";
-    image.addEventListener("error",()=>image.remove(),{once:true});marqueeTrack.appendChild(image);
+    const work=works.find(item=>item.photos[0]===src);
+    const button=document.createElement("button");
+    button.type="button";
+    button.setAttribute("aria-label","View "+(work?.title||"flash artwork"));
+    const image=document.createElement("img");
+    image.src=src;image.alt=round===0?newArt[index+1][1]:"";image.loading="lazy";
+    image.addEventListener("error",()=>button.remove(),{once:true});
+    button.appendChild(image);
+    button.addEventListener("click",()=>{if(work)openWork(work)});
+    marqueeTrack.appendChild(button);
   });
 }
 buildMarquee();
