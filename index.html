@@ -297,6 +297,16 @@ h2 {
   opacity: .7;
 }
 
+/* Image zoom inside the existing viewer (works with touch and mouse). */
+.zoom-controls{display:flex;align-items:center;gap:8px;direction:ltr}
+.zoom-controls button{min-width:36px;height:32px;padding:0 9px;background:transparent;border:1px solid rgba(242,235,221,.5);color:var(--paper);border-radius:5px;font-size:19px}
+.zoom-controls button:hover,.zoom-controls button:focus-visible{border-color:var(--paper);background:rgba(255,255,255,.12)}
+#zoomReset{font-size:13px;min-width:58px}
+.lightbox-image{transform-origin:center;transition:transform .12s ease;cursor:zoom-in;user-select:none;-webkit-user-select:none}
+.lightbox-image.is-zoomed{cursor:grab;touch-action:none}
+.lightbox-image.is-dragging{cursor:grabbing;transition:none}
+.lightbox-viewer{overflow:hidden}
+@media(prefers-reduced-motion:reduce){.lightbox-image{transition:none}}
 /* FLOATING LIGHTBOX */
 
 .lightbox {
@@ -762,7 +772,9 @@ footer .copyright {
       </button>
     </div>
 
-    <div class="lightbox-counter"
+    <div class="zoom-controls" role="group" aria-label="Image zoom"><button type="button" id="zoomOut" aria-label="Zoom out">−</button><button type="button" id="zoomReset" aria-label="Reset zoom">100%</button><button type="button" id="zoomIn" aria-label="Zoom in">+</button></div>
+
+  <div class="lightbox-counter"
          id="photoCounter"></div>
 
     <div class="lightbox-caption"
@@ -1152,6 +1164,7 @@ function openWork(work) {
 function showPhoto() {
   if (!activeWork) return;
 
+  resetImageZoom();
   lightboxTitle.textContent = activeWork.title;
 
   lightboxImage.src = activeWork.photos[activePhoto];
@@ -1187,6 +1200,7 @@ function closeLightbox() {
   setTimeout(() => { if (!activeWork) lightbox.classList.remove("open"); }, 290);
 
   document.body.classList.remove("modal-open");
+  resetImageZoom();
   activeWork = null;
 
   if (lastFocusedElement) {
@@ -1248,6 +1262,70 @@ document.addEventListener("keydown", event => {
   }
 });
 
+/* Image zoom. Buttons, double click, mouse wheel, pinch and drag. */
+let imageZoom=1,imageOffsetX=0,imageOffsetY=0;
+const zoomResetButton=document.getElementById("zoomReset");
+function applyImageZoom(){
+  const zoomed=imageZoom>1.001;
+  lightboxImage.classList.toggle("is-zoomed",zoomed);
+  if(!zoomed){imageOffsetX=0;imageOffsetY=0}
+  const maxX=Math.max(0,(lightboxImage.clientWidth*(imageZoom-1))/2);
+  const maxY=Math.max(0,(lightboxImage.clientHeight*(imageZoom-1))/2);
+  imageOffsetX=Math.max(-maxX,Math.min(maxX,imageOffsetX));
+  imageOffsetY=Math.max(-maxY,Math.min(maxY,imageOffsetY));
+  lightboxImage.style.transform="translate("+imageOffsetX+"px,"+imageOffsetY+"px) scale("+imageZoom+")";
+  zoomResetButton.textContent=Math.round(imageZoom*100)+"%";
+}
+function setImageZoom(next){
+  imageZoom=Math.max(1,Math.min(4,Math.round(next*100)/100));
+  applyImageZoom();
+}
+function resetImageZoom(){imageZoom=1;imageOffsetX=0;imageOffsetY=0;applyImageZoom()}
+document.getElementById("zoomIn").addEventListener("click",()=>setImageZoom(imageZoom+.5));
+document.getElementById("zoomOut").addEventListener("click",()=>setImageZoom(imageZoom-.5));
+zoomResetButton.addEventListener("click",resetImageZoom);
+lightboxImage.addEventListener("dblclick",()=>setImageZoom(imageZoom>1?1:2));
+lightboxImage.addEventListener("wheel",event=>{
+  event.preventDefault();
+  setImageZoom(imageZoom+(event.deltaY<0?.25:-.25));
+},{passive:false});
+let activeTouchDistance=null,lastTouchX=0,lastTouchY=0;
+function touchDistance(t){return Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY)}
+lightboxImage.addEventListener("touchstart",event=>{
+  if(event.touches.length===2){activeTouchDistance=touchDistance(event.touches);touchStartX=0}
+  else if(event.touches.length===1){lastTouchX=event.touches[0].clientX;lastTouchY=event.touches[0].clientY}
+},{passive:true});
+lightboxImage.addEventListener("touchmove",event=>{
+  if(event.touches.length===2){
+    event.preventDefault();
+    const distance=touchDistance(event.touches);
+    if(activeTouchDistance)setImageZoom(imageZoom*distance/activeTouchDistance);
+    activeTouchDistance=distance;
+  }else if(event.touches.length===1&&imageZoom>1){
+    event.preventDefault();
+    imageOffsetX+=event.touches[0].clientX-lastTouchX;
+    imageOffsetY+=event.touches[0].clientY-lastTouchY;
+    lastTouchX=event.touches[0].clientX;lastTouchY=event.touches[0].clientY;
+    applyImageZoom();
+  }
+},{passive:false});
+lightboxImage.addEventListener("touchend",()=>{activeTouchDistance=null},{passive:true});
+let dragPointer=null,dragX=0,dragY=0;
+lightboxImage.addEventListener("pointerdown",event=>{
+  if(imageZoom<=1||event.pointerType==="touch")return;
+  dragPointer=event.pointerId;dragX=event.clientX;dragY=event.clientY;
+  lightboxImage.setPointerCapture(event.pointerId);
+  lightboxImage.classList.add("is-dragging");
+});
+lightboxImage.addEventListener("pointermove",event=>{
+  if(dragPointer!==event.pointerId)return;
+  imageOffsetX+=event.clientX-dragX;imageOffsetY+=event.clientY-dragY;
+  dragX=event.clientX;dragY=event.clientY;applyImageZoom();
+});
+function stopDrag(){dragPointer=null;lightboxImage.classList.remove("is-dragging")}
+lightboxImage.addEventListener("pointerup",stopDrag);
+lightboxImage.addEventListener("pointercancel",stopDrag);
+
 /* TOUCH SWIPE */
 
 let touchStartX = 0;
@@ -1266,7 +1344,7 @@ lightboxImage.addEventListener(
     const distance =
       event.changedTouches[0].screenX - touchStartX;
 
-    if (Math.abs(distance) > 50) {
+    if (imageZoom<=1 && touchStartX && Math.abs(distance) > 50) {
       changePhoto(distance < 0 ? 1 : -1);
     }
   },
