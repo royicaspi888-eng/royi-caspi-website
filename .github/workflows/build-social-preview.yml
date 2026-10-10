@@ -37,6 +37,7 @@ jobs:
               document.querySelector('.hero').style.cssText+=';min-height:630px;height:630px;padding:30px 20px;';
               document.querySelector('.hero-photo').style.cssText+=';background-position:center 56%;';
               document.querySelector('.hero-subtitle').textContent='Traditional Roots. Wandering Soul.';
+              document.querySelector('.hero-content .button').style.display='none';
               document.documentElement.lang='en';
               document.documentElement.dir='ltr';
               await document.fonts.ready;
