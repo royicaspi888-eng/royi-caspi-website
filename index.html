@@ -545,9 +545,9 @@ footer .copyright {
 
 /* Flash strip: scrollable continuously, with enough inner vertical space for hovered art. */
 .flash-marquee{position:relative;width:100%;max-width:1200px;margin:0 auto 22px;direction:ltr}
-.flash-marquee-viewport{width:100%;overflow-x:auto;overflow-y:hidden;padding:44px 12px;scrollbar-width:none;overscroll-behavior-x:contain;mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent)}
+.flash-marquee-viewport{width:100%;overflow:hidden;padding:44px 0;mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent)}
 .flash-marquee-viewport::-webkit-scrollbar{display:none}
-.flash-marquee-track{display:flex;align-items:center;gap:16px;width:max-content}
+.flash-marquee-track{display:flex;align-items:center;gap:16px;padding-right:16px;width:max-content;will-change:transform}
 .flash-marquee-track button{display:block;flex:none;padding:0;border:0;background:transparent;border-radius:8px;cursor:zoom-in;transform-origin:center;transition:transform .25s ease,box-shadow .25s ease;position:relative}
 .flash-marquee-track button:hover,.flash-marquee-track button:focus-visible{transform:scale(1.18);z-index:3;box-shadow:0 12px 30px rgba(0,0,0,.45);outline:2px solid var(--paper);outline-offset:2px}
 .flash-marquee-track button img{display:block;height:190px;width:auto;max-width:270px;object-fit:contain;border-radius:8px}
@@ -1038,33 +1038,57 @@ function buildMarquee(){
   });
 }
 buildMarquee();
-/* Auto-drift and manual navigation share the same scroll position. */
+/* Seamless infinite loop: translate the duplicated set instead of scrolling a finite browser viewport. */
 let marqueePausedUntil=0;
 let marqueePreviousFrame=0;
-const marqueeReducedMotion=window.matchMedia("(prefers-reduced-motion: reduce)");
-function marqueeTick(now){
-  if(marqueePreviousFrame){
-    const elapsed=Math.min(now-marqueePreviousFrame,60);
-    const hovering=window.matchMedia("(hover: hover) and (pointer: fine)").matches && marqueeViewport.matches(":hover");
-    const loop=marqueeTrack.scrollWidth/2;
-    if(!marqueeReducedMotion.matches&&!hovering&&flashPreview.hidden&&now>marqueePausedUntil&&loop>0){
-      marqueeViewport.scrollLeft+=elapsed*0.035;
-    }
-    if(loop>0&&marqueeViewport.scrollLeft>=loop)marqueeViewport.scrollLeft-=loop;
+let marqueeOffset=0;
+let marqueeManualTarget=null;
+let marqueeHovered=false;
+const marqueeCanHover=window.matchMedia("(hover: hover) and (pointer: fine)");
+function marqueeLoopWidth(){
+  return marqueeTrack.scrollWidth/2;
+}
+function normalizeMarqueeOffset(){
+  const loop=marqueeLoopWidth();
+  if(loop>0){
+    marqueeOffset=((marqueeOffset%loop)+loop)%loop;
+    if(marqueeManualTarget!==null)marqueeManualTarget=((marqueeManualTarget%loop)+loop)%loop;
   }
+}
+function marqueeTick(now){
+  const elapsed=marqueePreviousFrame?Math.min(now-marqueePreviousFrame,64):0;
   marqueePreviousFrame=now;
+  const loop=marqueeLoopWidth();
+  if(loop>0){
+    if(marqueeManualTarget!==null){
+      // Travel to the chosen neighbor, then resume autoplay without reaching an end.
+      let distance=(marqueeManualTarget-marqueeOffset+loop*1.5)%loop-loop/2;
+      const step=Math.sign(distance)*Math.min(Math.abs(distance),elapsed*0.85);
+      marqueeOffset+=step;
+      if(Math.abs(distance)<0.8){marqueeOffset=marqueeManualTarget;marqueeManualTarget=null;}
+    }else if(!marqueeHovered&&flashPreview.hidden&&now>marqueePausedUntil){
+      marqueeOffset+=elapsed*0.04;
+    }
+    marqueeOffset=((marqueeOffset%loop)+loop)%loop;
+    marqueeTrack.style.transform="translate3d("+(-marqueeOffset)+"px,0,0)";
+  }
   requestAnimationFrame(marqueeTick);
 }
 requestAnimationFrame(marqueeTick);
+marqueeViewport.addEventListener("pointerenter",event=>{
+  if(marqueeCanHover.matches&&event.pointerType==="mouse")marqueeHovered=true;
+});
+marqueeViewport.addEventListener("pointerleave",()=>{marqueeHovered=false});
 function browseMarquee(direction){
-  const loop=marqueeTrack.scrollWidth/2;
-  if(loop>0&&marqueeViewport.scrollLeft>=loop)marqueeViewport.scrollLeft-=loop;
-  marqueePausedUntil=performance.now()+4000;
-  marqueeViewport.scrollBy({left:direction*300,behavior:marqueeReducedMotion.matches?"instant":"smooth"});
+  const loop=marqueeLoopWidth();
+  if(!loop)return;
+  marqueeHovered=false;
+  const amount=Math.min(marqueeViewport.clientWidth*.6,330);
+  marqueeManualTarget=((marqueeOffset+direction*amount)%loop+loop)%loop;
+  marqueePausedUntil=performance.now()+1200;
 }
 document.getElementById("flashScrollLeft").addEventListener("click",()=>browseMarquee(-1));
 document.getElementById("flashScrollRight").addEventListener("click",()=>browseMarquee(1));
-marqueeViewport.addEventListener("scroll",()=>{ /* Browser touch/pointer scrolling stays available. */ },{passive:true});
 
 /* PROJECT PHOTO THUMBNAILS */
 function renderPhotoStrip() {
