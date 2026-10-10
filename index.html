@@ -35,7 +35,7 @@ body.modal-open { overflow: hidden; }
 body.hebrew { font-family: 'Heebo', Arial, sans-serif; }
 body.hebrew h2,body.hebrew h3 {font-family:'Heebo',sans-serif;font-weight:700}
 body.hebrew .about-copy{text-align:right}
-body.hebrew header{justify-content:flex-start}
+body.hebrew header{justify-content:space-between}
 body.hebrew .header-actions{margin-inline-start:0;justify-content:flex-start}
 body.hebrew nav{justify-content:flex-start}
 body.hebrew .about-copy h2{white-space:nowrap;font-size:clamp(26px,3.5vw,52px)}
@@ -63,6 +63,7 @@ header {
   top: 0;
   z-index: 100;
   display: flex;
+  flex-direction: row-reverse;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
