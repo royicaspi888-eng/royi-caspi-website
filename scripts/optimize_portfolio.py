@@ -14,7 +14,7 @@ last = html.find("];", first)
 if first < 0 or last < 0:
     raise RuntimeError("Cannot locate gallery list")
 section = html[first:last]
-originals = list(dict.fromkeys(re.findall(r'"([^"\\]+\\.(?:jpg|jpeg|JPG))"', section, flags=re.I)))
+originals = list(dict.fromkeys(re.findall(r'"([^"]+\.(?:jpg|jpeg))"', section, flags=re.I)))
 # Avoid running the conversion again once references have already been updated.
 originals = [name for name in originals if not name.startswith("assets/optimized/")]
 
