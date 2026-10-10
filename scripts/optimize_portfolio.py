@@ -61,7 +61,7 @@ for source_name, dest_name, size, quality in static_photos:
 marker = '/* RENDER GALLERY */'
 if marker not in html:
     raise RuntimeError("Cannot locate gallery renderer")
-lookup = "const optimizedThumbnails=" + json.dumps(mapping, ensure_ascii=False, separators=(",", ":")) + ";\\n"
+lookup = "const optimizedThumbnails=" + json.dumps(mapping, ensure_ascii=False, separators=(",", ":")) + ";\n"
 html = html.replace(marker, lookup + marker, 1)
 old = '    img.src = work.photos[0];'
 if old not in html:
