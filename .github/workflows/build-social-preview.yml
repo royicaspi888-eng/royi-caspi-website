@@ -1,0 +1,58 @@
+name: Build homepage social preview
+
+on:
+  push:
+    branches: [portfolio-improvements]
+    paths:
+      - '.github/workflows/build-social-preview.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  social-preview:
+    if: github.ref == 'refs/heads/portfolio-improvements'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: portfolio-improvements
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser
+        run: npx --yes playwright@1.58.2 install --with-deps chromium
+      - name: Capture the actual homepage heading and photograph
+        run: |
+          python3 -m http.server 8765 >/tmp/preview-server.log 2>&1 &
+          cat >/tmp/og-capture.js <<'JS'
+          const { chromium } = require('playwright');
+          (async()=>{
+            const browser=await chromium.launch({headless:true});
+            const page=await browser.newPage({viewport:{width:1200,height:630},deviceScaleFactor:1});
+            await page.goto('http://127.0.0.1:8765/index.html',{waitUntil:'networkidle'});
+            await page.evaluate(async()=>{
+              document.querySelector('header').style.display='none';
+              document.querySelector('.hero').style.cssText+=';min-height:630px;height:630px;padding:30px 20px;';
+              document.querySelector('.hero-photo').style.cssText+=';background-position:center 56%;';
+              document.querySelector('.hero-subtitle').textContent='Traditional Roots. Wandering Soul.';
+              document.documentElement.lang='en';
+              document.documentElement.dir='ltr';
+              await document.fonts.ready;
+            });
+            await page.locator('.hero').screenshot({path:'share-preview.png'});
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          npm install --prefix /tmp/og-playwright --no-save playwright@1.58.2
+          NODE_PATH=/tmp/og-playwright/node_modules node /tmp/og-capture.js
+      - name: Save social card on preview branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add share-preview.png
+          if ! git diff --cached --quiet; then
+            git commit -m 'Create social sharing card from the real homepage'
+            git push origin HEAD:portfolio-improvements
+          fi
