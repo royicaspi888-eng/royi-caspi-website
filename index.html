@@ -563,7 +563,7 @@ footer .copyright {
 
 /* Flash strip: scrollable continuously, with enough inner vertical space for hovered art. */
 .flash-marquee{position:relative;width:100%;max-width:1200px;margin:0 auto 22px;direction:ltr}
-.flash-marquee-viewport{width:100%;overflow:hidden;padding:44px 0;mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent)}
+.flash-marquee-viewport{width:100%;overflow:hidden;padding:44px 0;touch-action:pan-y;mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent)}
 .flash-marquee-viewport::-webkit-scrollbar{display:none}
 .flash-marquee-track{display:flex;align-items:center;gap:16px;padding-right:16px;width:max-content;will-change:transform}
 .flash-marquee-track button{display:block;flex:none;padding:0;border:0;background:transparent;border-radius:8px;cursor:zoom-in;transform-origin:center;transition:transform .25s ease,box-shadow .25s ease;position:relative}
@@ -797,10 +797,20 @@ document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=translation
 document.querySelectorAll("[data-lang]").forEach(el=>{const selected=el.dataset.lang===lang;el.classList.toggle("active",selected);el.setAttribute("aria-pressed",String(selected))});
 const message=lang==="he"?"היי רועי! הגעתי דרך האתר שלך ואשמח לשמוע פרטים על קעקוע :)":"Hey Royi! I found your website and would love to hear more about getting a tattoo :)";
 document.getElementById("whatsappLink").href="https://wa.me/972507964643?text="+encodeURIComponent(message);
+document.getElementById("whatsappLink").dataset.messageLanguage=lang;
 if(save){try{localStorage.setItem("royi-site-language",lang)}catch(e){}}
 renderGallery(activeFilter);
 }
 document.querySelectorAll("[data-lang]").forEach(btn=>btn.addEventListener("click",()=>setLanguage(btn.dataset.lang)));
+/* Generate WhatsApp text in the active website language right when the link opens. */
+const whatsappLink=document.getElementById("whatsappLink");
+whatsappLink.addEventListener("click",()=>{
+  const language=document.documentElement.lang==="he"?"he":"en";
+  const message=language==="he"
+    ?"היי רועי! הגעתי דרך האתר שלך ואשמח לשמוע פרטים על קעקוע :)"
+    :"Hey Royi! I found your website and would love to hear more about getting a tattoo :)";
+  whatsappLink.href="https://wa.me/972507964643?text="+encodeURIComponent(message);
+});
 function setGalleryFilter(filter){visibleCount=9;activeFilter=filter;document.querySelectorAll(".filter-btn").forEach(btn=>{const selected=btn.dataset.filter===filter;btn.classList.toggle("active",selected);btn.setAttribute("aria-pressed",String(selected))});renderGallery(filter)}
 document.getElementById("flashGalleryLink").addEventListener("click",e=>{e.preventDefault();setGalleryFilter("flash");document.getElementById("portfolio").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});if(history.replaceState)history.replaceState(null,"","#portfolio")});
 
@@ -1053,7 +1063,7 @@ function buildMarquee(){
     image.src=src;image.alt=round===0?newArt[index+1][1]:"";image.loading="lazy";
     image.addEventListener("error",()=>button.remove(),{once:true});
     button.appendChild(image);
-    button.addEventListener("click",()=>showFlashPreview(index));
+    button.addEventListener("click",event=>{if(suppressFlashClick){event.preventDefault();return}showFlashPreview(index)});
     marqueeTrack.appendChild(button);
   });
 }
@@ -1064,6 +1074,8 @@ let marqueePreviousFrame=0;
 let marqueeOffset=0;
 let marqueeManualTarget=null;
 let marqueeHovered=false;
+let marqueeTouchActive=false;
+let suppressFlashClick=false;
 const marqueeCanHover=window.matchMedia("(hover: hover) and (pointer: fine)");
 function marqueeLoopWidth(){
   return marqueeTrack.scrollWidth/2;
@@ -1086,7 +1098,7 @@ function marqueeTick(now){
       const step=Math.sign(distance)*Math.min(Math.abs(distance),elapsed*0.85);
       marqueeOffset+=step;
       if(Math.abs(distance)<0.8){marqueeOffset=marqueeManualTarget;marqueeManualTarget=null;}
-    }else if(!marqueeHovered&&flashPreview.hidden&&now>marqueePausedUntil){
+    }else if(!marqueeHovered&&!marqueeTouchActive&&flashPreview.hidden&&now>marqueePausedUntil){
       marqueeOffset+=elapsed*0.04;
     }
     marqueeOffset=((marqueeOffset%loop)+loop)%loop;
@@ -1109,6 +1121,41 @@ function browseMarquee(direction){
 }
 document.getElementById("flashScrollLeft").addEventListener("click",()=>browseMarquee(-1));
 document.getElementById("flashScrollRight").addEventListener("click",()=>browseMarquee(1));
+/* Drag the endless flash strip with a finger; vertical page scrolling remains normal. */
+let swipeStartX=0,swipeStartY=0,swipeLastX=0,swipeMoved=false,swipeHorizontal=false;
+marqueeViewport.addEventListener("touchstart",event=>{
+  if(event.touches.length!==1)return;
+  const touch=event.touches[0];
+  swipeStartX=swipeLastX=touch.clientX;
+  swipeStartY=touch.clientY;
+  swipeMoved=false;swipeHorizontal=false;
+  marqueeTouchActive=true;
+  marqueeManualTarget=null;
+},{passive:true});
+marqueeViewport.addEventListener("touchmove",event=>{
+  if(!marqueeTouchActive||event.touches.length!==1)return;
+  const touch=event.touches[0];
+  const dx=touch.clientX-swipeStartX,dy=touch.clientY-swipeStartY;
+  if(!swipeHorizontal&&Math.abs(dx)>8&&Math.abs(dx)>Math.abs(dy)*1.2)swipeHorizontal=true;
+  if(!swipeHorizontal)return;
+  event.preventDefault();
+  const movement=touch.clientX-swipeLastX;
+  marqueeOffset-=movement;
+  swipeLastX=touch.clientX;
+  swipeMoved=swipeMoved||Math.abs(dx)>10;
+  marqueePausedUntil=performance.now()+1600;
+},{passive:false});
+function endMarqueeTouch(){
+  if(swipeMoved){
+    suppressFlashClick=true;
+    // Block the synthesized click following a swipe without blocking later taps.
+    setTimeout(()=>{suppressFlashClick=false},350);
+  }
+  marqueeTouchActive=false;
+  marqueePausedUntil=performance.now()+1500;
+}
+marqueeViewport.addEventListener("touchend",endMarqueeTouch,{passive:true});
+marqueeViewport.addEventListener("touchcancel",endMarqueeTouch,{passive:true});
 
 /* PROJECT PHOTO THUMBNAILS */
 function renderPhotoStrip() {
