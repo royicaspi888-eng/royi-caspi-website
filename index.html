@@ -551,9 +551,10 @@ footer .copyright {
 .flash-marquee-track button{display:block;flex:none;padding:0;border:0;background:transparent;border-radius:8px;cursor:zoom-in;transform-origin:center;transition:transform .25s ease,box-shadow .25s ease;position:relative}
 .flash-marquee-track button:hover,.flash-marquee-track button:focus-visible{transform:scale(1.18);z-index:3;box-shadow:0 12px 30px rgba(0,0,0,.45);outline:2px solid var(--paper);outline-offset:2px}
 .flash-marquee-track button img{display:block;height:190px;width:auto;max-width:270px;object-fit:contain;border-radius:8px}
-.flash-edge-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:4;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid var(--paper);padding:0;background:rgba(100,29,41,.94);color:var(--paper);font-size:29px;line-height:1;cursor:pointer}
-.flash-edge-left{left:5px}.flash-edge-right{right:5px}
-.flash-edge-arrow:hover,.flash-edge-arrow:focus-visible{background:var(--red)}
+.flash-edge-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:4;display:grid;place-items:center;width:42px;height:64px;border:0;border-radius:0;padding:0;background:transparent;color:var(--paper);font-size:38px;line-height:1;cursor:pointer;text-shadow:0 2px 8px #000;transition:opacity .2s,transform .2s}
+.flash-edge-left{left:0}.flash-edge-right{right:0}
+.flash-edge-arrow:hover,.flash-edge-arrow:focus-visible{background:transparent;color:#df999f;transform:translateY(-50%) scale(1.15)}
+.flash-edge-arrow:focus-visible{outline:2px solid var(--paper);outline-offset:-3px}
 .flash-preview{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;gap:14px;background:rgba(23,23,23,.88);padding:12px}
 .flash-preview[hidden]{display:none}
 .flash-preview img{max-height:310px;max-width:calc(100% - 130px);object-fit:contain;border-radius:9px;box-shadow:0 12px 40px #0008}
@@ -1044,7 +1045,7 @@ const marqueeReducedMotion=window.matchMedia("(prefers-reduced-motion: reduce)")
 function marqueeTick(now){
   if(marqueePreviousFrame){
     const elapsed=Math.min(now-marqueePreviousFrame,60);
-    const hovering=marqueeViewport.matches(":hover")||marqueeViewport.contains(document.activeElement);
+    const hovering=window.matchMedia("(hover: hover) and (pointer: fine)").matches && marqueeViewport.matches(":hover");
     const loop=marqueeTrack.scrollWidth/2;
     if(!marqueeReducedMotion.matches&&!hovering&&flashPreview.hidden&&now>marqueePausedUntil&&loop>0){
       marqueeViewport.scrollLeft+=elapsed*0.035;
