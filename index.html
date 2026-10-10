@@ -63,7 +63,7 @@ header {
   top: 0;
   z-index: 100;
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
@@ -264,7 +264,7 @@ h2 {
   border-radius: 15px;
   background: transparent;
   overflow: hidden;
-  transform:translateZ(0); transition: box-shadow .25s ease;
+  transform:translateZ(0); transition: box-shadow .25s ease,transform .25s ease;
 }
 
 .work-card img {
@@ -275,8 +275,10 @@ h2 {
   transition: opacity .25s ease;
 }
 
-.work-card:hover {
-  box-shadow: 0 12px 25px rgba(23,23,23,.15);
+.work-card:hover,.work-card:focus-visible {
+  box-shadow: 0 18px 38px rgba(23,23,23,.24);
+  transform:translateY(-5px) scale(1.025);
+  position:relative;z-index:1;
 }
 
 .gallery-note {
@@ -539,18 +541,24 @@ footer .copyright {
   }
 }
 
+/* Inline flash preview and browsing arrows. */
+.flash-preview{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(23,23,23,.88);padding:8px}
+.flash-preview[hidden]{display:none}
+.flash-preview img{height:min(270px,100%);max-width:calc(100% - 100px);object-fit:contain;border-radius:9px;box-shadow:0 12px 40px #0008}
+.flash-preview-arrow{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid #f2ebdd;color:#f2ebdd;background:#641d29;font-size:28px;line-height:1}
+.flash-preview-arrow:hover{background:#ad3038}
 /* Subtle, continuously moving available-flash strip. */
 .flash-price{font-size:.9rem;opacity:.75;margin:0 auto 25px}
 .flash-marquee-track button{display:block;flex:none;padding:0;border:0;background:transparent;border-radius:8px;cursor:zoom-in;transition:transform .22s ease,box-shadow .22s ease;position:relative}
-.flash-marquee-track button:hover,.flash-marquee-track button:focus-visible{transform:scale(1.09);z-index:2;box-shadow:0 12px 30px rgba(0,0,0,.45);outline:2px solid var(--paper);outline-offset:2px}
+.flash-marquee-track button:hover,.flash-marquee-track button:focus-visible{transform:scale(1.18);z-index:2;box-shadow:0 12px 30px rgba(0,0,0,.45);outline:2px solid var(--paper);outline-offset:2px}
 .flash-marquee-track button img{display:block}
 .flash-marquee:has(button:focus-visible) .flash-marquee-track{animation-play-state:paused}
-.flash-marquee{width:100%;max-width:1200px;margin:28px auto 34px;overflow:hidden;direction:ltr;mask-image:linear-gradient(to right,transparent,#000 5%,#000 95%,transparent)}
+.flash-marquee{position:relative;width:100%;max-width:1200px;margin:28px auto 34px;min-height:285px;overflow:hidden;direction:ltr;mask-image:linear-gradient(to right,transparent,#000 5%,#000 95%,transparent)}
 .flash-marquee-track{display:flex;align-items:center;gap:16px;width:max-content;animation:flash-drift 48s linear infinite}
 .flash-marquee-track img{height:190px;width:auto;max-width:270px;object-fit:contain;border-radius:8px;flex:none}
 .flash-marquee:hover .flash-marquee-track,.flash-marquee:focus-within .flash-marquee-track{animation-play-state:paused}
 @keyframes flash-drift{to{transform:translateX(-50%)}}
-@media(max-width:700px){.flash-marquee-track img{height:145px}.flash-marquee-track{gap:12px;animation-duration:40s}}
+@media(max-width:700px){.flash-marquee{min-height:210px}.flash-preview img{height:185px}.flash-marquee-track img{height:145px}.flash-marquee-track{gap:12px;animation-duration:40s}}
 @media(prefers-reduced-motion:reduce){.flash-marquee{overflow-x:auto;mask-image:none}.flash-marquee-track{animation:none}}
 /* Thumbnail navigation keeps the original masonry portfolio intact. */
 .photo-strip { display:flex; max-width:100%; gap:9px; overflow-x:auto; padding:5px 4px 10px; justify-content:flex-start; scrollbar-width:thin; }
@@ -648,7 +656,7 @@ footer .copyright {
     Old-school spirit, new stories.
   </p>
 
-  <div class="flash-marquee" aria-label="Available tattoo flash designs"><div class="flash-marquee-track" id="flashMarqueeTrack"></div></div>
+  <div class="flash-marquee" aria-label="Available tattoo flash designs"><div class="flash-marquee-track" id="flashMarqueeTrack"></div><div class="flash-preview" id="flashPreview" hidden><button type="button" class="flash-preview-arrow" id="flashPrev" aria-label="Previous flash">‹</button><img id="flashPreviewImage" alt=""><button type="button" class="flash-preview-arrow" id="flashNext" aria-label="Next flash">›</button></div></div>
 
   <p class="flash-price" data-i18n="flashPrice">Friendly prices on selected flash designs.</p>
 
@@ -992,6 +1000,19 @@ function renderGallery(filter = "all") {
 /* Available designs, displayed as a gentle continuous strip. The first sheet includes a completed lighthouse and is intentionally excluded. */
 const marqueeFiles = newArt.filter((entry,index)=>index!==0).map(entry=>entry[0]);
 const marqueeTrack = document.getElementById("flashMarqueeTrack");
+let flashPreviewIndex=0;
+const flashPreview=document.getElementById("flashPreview");
+const flashPreviewImage=document.getElementById("flashPreviewImage");
+function showFlashPreview(index){
+  flashPreviewIndex=(index+marqueeFiles.length)%marqueeFiles.length;
+  flashPreviewImage.src=marqueeFiles[flashPreviewIndex];
+  flashPreviewImage.alt=newArt[flashPreviewIndex+1][1];
+  flashPreview.hidden=false;
+}
+document.getElementById("flashPrev").addEventListener("click",()=>showFlashPreview(flashPreviewIndex-1));
+document.getElementById("flashNext").addEventListener("click",()=>showFlashPreview(flashPreviewIndex+1));
+flashPreview.addEventListener("mouseleave",()=>{flashPreview.hidden=true});
+flashPreview.addEventListener("keydown",e=>{if(e.key==="Escape")flashPreview.hidden=true});
 function buildMarquee(){
   for(let round=0;round<2;round++) marqueeFiles.forEach((src,index)=>{
     const work=works.find(item=>item.photos[0]===src);
@@ -1002,7 +1023,9 @@ function buildMarquee(){
     image.src=src;image.alt=round===0?newArt[index+1][1]:"";image.loading="lazy";
     image.addEventListener("error",()=>button.remove(),{once:true});
     button.appendChild(image);
-    button.addEventListener("click",()=>{if(work)openWork(work)});
+    button.addEventListener("mouseenter",()=>showFlashPreview(index));
+    button.addEventListener("focus",()=>showFlashPreview(index));
+    button.addEventListener("click",()=>showFlashPreview(index));
     marqueeTrack.appendChild(button);
   });
 }
