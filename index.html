@@ -545,8 +545,9 @@ footer .copyright {
 .flash-preview{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(23,23,23,.88);padding:8px}
 .flash-preview[hidden]{display:none}
 .flash-preview img{height:min(270px,100%);max-width:calc(100% - 100px);object-fit:contain;border-radius:9px;box-shadow:0 12px 40px #0008}
-.flash-preview-arrow{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid #f2ebdd;color:#f2ebdd;background:#641d29;font-size:28px;line-height:1}
+.flash-preview-arrow{display:grid;place-items:center;flex:0 0 42px;width:42px;min-width:42px;height:42px;aspect-ratio:1;border-radius:50%;padding:0;border:1px solid #f2ebdd;color:#f2ebdd;background:#641d29;font-size:28px;line-height:1;cursor:pointer}
 .flash-preview-arrow:hover{background:#ad3038}
+.flash-preview-arrow:focus-visible{outline:2px solid #f2ebdd;outline-offset:3px}
 /* Subtle, continuously moving available-flash strip. */
 .flash-price{font-size:.9rem;opacity:.75;margin:0 auto 25px}
 .flash-marquee-track button{display:block;flex:none;padding:0;border:0;background:transparent;border-radius:8px;cursor:zoom-in;transition:transform .22s ease,box-shadow .22s ease;position:relative}
@@ -1023,8 +1024,6 @@ function buildMarquee(){
     image.src=src;image.alt=round===0?newArt[index+1][1]:"";image.loading="lazy";
     image.addEventListener("error",()=>button.remove(),{once:true});
     button.appendChild(image);
-    button.addEventListener("mouseenter",()=>showFlashPreview(index));
-    button.addEventListener("focus",()=>showFlashPreview(index));
     button.addEventListener("click",()=>showFlashPreview(index));
     marqueeTrack.appendChild(button);
   });
